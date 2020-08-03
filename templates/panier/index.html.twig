@@ -1,0 +1,68 @@
+{% extends '@AcMarcheMaintenanceShop/layout.html.twig' %}
+
+{% block body %}
+    <div class="page-header">
+        <h3>Votre panier</h3>
+    </div>
+
+    <div id="message"></div>
+
+    {% if commande.totalQuantite > 0 %}
+        <div id="result">
+            {% include '@AcMarcheMaintenanceShop/panier/_list_produits.html.twig' with {'commande': commande} %}
+        </div>
+
+        {{ form_start(form, { 'attr': {'class': 'well'} }) }}
+        {{ form_errors(form) }}
+        <div class="row">
+            <div class="col-lg-6">
+                {{ form_row(form.nom) }}
+                {{ form_row(form.prenom) }}
+                {{ form_row(form.lieu) }}
+            </div>
+            <div class="col-lg-6">
+                {{ form_row(form.commentaire) }}
+            </div>
+        </div>
+
+        {{ form_end(form) }}
+    {% else %}
+        <p class="text-warning">Votre panier est vide</p>
+    {% endif %}
+
+{% endblock %}
+{% block scripts %}
+    <script>
+        $(".quantite-control").focusout(function () {
+            var produitCommandeId = jQuery(this).attr("data-commande");
+            var quantite = $("#commande_quantite_" + produitCommandeId).val();
+
+            $.post("{{ path('acmaintenance_commande_update_quantite') }}",
+                {
+                    id: produitCommandeId,
+                    quantite: quantite
+                },
+                function (data, status) {
+                    console.log("updater");
+                    $("#message").html(data);
+                });
+        });
+
+        $(".produit-control").click(function () {
+            var produitCommandeId = jQuery(this).attr("data-produit");
+
+            $.post("{{ path('acmaintenance_commande_delete') }}",
+                {
+                    id: produitCommandeId
+                },
+                function (data, status) {
+                    if (data.status == 'error') {
+                        $("#message").html(data.message);
+                    }
+                    else {
+                        $("#result").html(data.message);
+                    }
+                });
+        });
+    </script>
+{% endblock %}

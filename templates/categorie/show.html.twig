@@ -1,0 +1,13 @@
+{% extends '@AcMarcheMaintenanceShop/layout.html.twig' %}
+
+{% block body -%}
+    <div class="page-header">
+        <h3>Catégorie <strong>{{ entity }}</strong></h3>
+    </div>
+
+    {% include '@AcMarcheMaintenanceShop/categorie/actions.html.twig' with {'entity': entity } %}
+
+     {% include '@AcMarcheMaintenanceShop/categorie/produits.html.twig' with {'entity': entity } %}
+
+    {% include '@AcMarcheMaintenanceShop/categorie/delete.html.twig' with {'delete_form': delete_form } %}
+{% endblock %}

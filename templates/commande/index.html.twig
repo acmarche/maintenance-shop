@@ -1,0 +1,66 @@
+{% extends '@AcMarcheMaintenanceShop/layout.html.twig' %}
+
+{% block body %}
+    <div class="page-header">
+        <h3>Rechercher des produits</h3>
+    </div>
+
+    {% include '@AcMarcheMaintenanceShop/search/produit.html.twig' with {'form': search_form } %}
+
+    <br/>
+    {% if search and entities | length == 0 %}
+        <p class="text-warning">Aucun produit trouvé</p>
+    {% endif %}
+
+    {% if entities | length > 0 %}
+        {{ form_start(form, { 'attr': {'class': 'form-inline'}}) }}
+        {{ form_errors(form) }}
+
+        <ul class="list-group">
+            {% for entity in entities %}
+                <li class="list-group-item clearfix">
+
+                    <h5 class="text-success">{{ entity.nom }} <span class="text-muted">{{ entity.description }}</span></h5>
+
+                    <div class="form-group">
+                        <label for="commande_quantite_{{ entity.id }}">Quantité</label>
+                        <input type="number" id="commande_quantite_{{ entity.id }}" name="quantite" required="required"
+                               value="1"
+                               class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <button type="button" name="commande[submit]" data-produit="{{ entity.id }}"
+                                class="btn-default btn bouton-add">
+                            Ajouter
+                        </button>
+                    </div>
+
+                    <div id="commande_result_{{ entity.id }}" class="form-group" style="margin-left: 20px;">
+
+                    </div>
+
+                </li>
+            {% endfor %}
+        </ul>
+        {{ form_end(form) }}
+    {% endif %}
+
+{% endblock %}
+{% block scripts %}
+    <script>
+        $(".bouton-add").click(function () {
+            var produitId = jQuery(this).attr("data-produit");
+            var quantite = $("#commande_quantite_" + produitId).val();
+
+            $.post("{{ path('acmaintenance_commande_add') }}",
+                {
+                    produit: produitId,
+                    quantite: quantite
+                },
+                function (data, status) {
+                    $("#commande_result_" + produitId).html(data);
+                });
+        });
+    </script>
+{% endblock %}

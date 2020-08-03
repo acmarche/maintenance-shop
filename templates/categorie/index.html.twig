@@ -1,0 +1,31 @@
+{% extends '@AcMarcheMaintenanceShop/layout.html.twig' %}
+
+{% block body -%}
+    <div class="page-header">
+        <h3>Liste des catégories</h3>
+    </div>
+
+    <a href="{{ path('acmaintenance_categorie_new') }}" class="btn btn-primary" role="button"><i
+                class="glyphicon glyphicon-plus"></i> Ajouter</a>
+
+    <br/>   <br/>
+
+    {% if entities | length > 0 %}
+        <table class='table table-bordered table-hover'>
+            <thead>
+            <tr>
+                <th>Intitule</th>
+                <th>Nbre de produits</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for entity in entities %}
+                <tr>
+                    <td><a href="{{ path('acmaintenance_categorie_show', { 'id': entity.id }) }}">{{ entity }}</a></td>
+                    <td>{{ entity.produits | length }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,15 @@
+Nouvelle commande faite par {{ commande.nom }}  {{ commande.prenom }}
+Pour livrer à  {{ commande.lieu }}
+
+Liste des produits
+
+{% for produit in commande.produits %}
+    {{ produit.quantite }} {{ produit.produit }}
+{% endfor %}
+
+{{ commande.commentaire | nl2br }}
+
+Consulter la commande en ligne :
+
+{{ url('acmaintenance_commande_show', {'id' : commande.id}) }}
+

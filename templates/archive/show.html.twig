@@ -1,0 +1,22 @@
+{% extends '@AcMarcheMaintenanceShop/layout.html.twig' %}
+
+{% block scripts %}
+
+{% endblock %}
+
+{% block body %}
+ <div class="page-header">
+        <h3>Archive commande {{ commande.id }}</h3>
+    </div>
+
+    <h4 class="text-success">Commande crée le {{ commande.createdAt | date('d-m-Y H:i') }}</h4>
+
+    <strong>Pour {{ commande.nom }} {{ commande.prenom }} à {{ commande.lieu }}</strong>
+    <br /><br />
+
+    {{ commande.commentaire | nl2br }}
+    <br /><br />
+    {{ commande.archivesProduits | raw }}
+
+{% endblock %}
+

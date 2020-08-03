@@ -1,0 +1,10 @@
+doctrine:
+  orm:
+    mappings:
+      AcMarche\MaintenanceShop:
+        is_bundle: false
+        type: annotation
+        dir: '%kernel.project_dir%/src/AcMarche/MaintenanceShop/src/Entity'
+        prefix: 'AcMarche\MaintenanceShop'
+        alias: AcMarche\MaintenanceShop
+

@@ -1,0 +1,74 @@
+{% extends '@AcMarcheMaintenanceShop/layout.html.twig' %}
+
+{% block body %}
+    <div class="page-header">
+        <h3>Trier les produits pour la catégorie {{ entity }}</h3>
+    </div>
+
+    <br/>
+
+    <div class="alert alert-info">
+        Cliquez sur un produit et maintenez le clic tout en clissant la souris pour changer l'ordre
+    </div>
+
+    <div id="success">
+
+    </div>
+
+    {% if entity.produits | length > 0 %}
+        <ul class="list-group" id="sortable">
+            {% for produit in entity.produits %}
+
+                <li id="produits-{{ produit.id }}" class="list-group-item"><span
+                            class="glyphicon glyphicon-sort"></span> {{ produit }}</li>
+
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="text-warning">Aucun produit</p>
+    {% endif %}
+
+    <a href="{{ path('acmaintenance_categorie_show', { 'id': entity.id }) }}">
+        <span class="glyphicon glyphicon-list"></span> Retour à la catégorie
+    </a>
+
+
+
+{% endblock %}
+
+{% block scripts %}
+    <script
+            src="https://code.jquery.com/ui/1.11.3/jquery-ui.min.js"
+            integrity="sha256-xI/qyl9vpwWFOXz7+x/9WkG5j/SVnSw21viy8fWwbeE="
+            crossorigin="anonymous"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("#sortable").sortable({
+                // limitons les déplacements sur l'axe des ordonnées, ce sera plus propre
+                axis: 'y',
+                update: function (event, ui) {
+                    // Construit un tableau des ids des stories
+                    serial = $(this).sortable('serialize');
+                    // Appelle une action en ajax
+                    $.ajax({
+                        url: '{{ path('acmaintenance_categorie_trier', {'id' : entity.id}) }}',
+                        type: "post",
+                        data: serial,
+                        success: function (html) {
+                            $('#success').append(html);
+                            $('#success').fadeIn(500);
+                            $('#success').fadeOut(2000);
+                        },
+                        error: function () {
+                            alert("Oups le tri ne s'est pas enregistré");
+                        }
+                    })
+                }
+            });
+
+            $("#sortable").disableSelection();
+        });
+
+    </script>
+{% endblock %}

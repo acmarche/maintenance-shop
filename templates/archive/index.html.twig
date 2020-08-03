@@ -1,0 +1,27 @@
+{% extends '@AcMarcheMaintenanceShop/layout.html.twig' %}
+
+{% block body %}
+    <div class="page-header">
+        <h3>Archive des commandes</h3>
+    </div>
+
+    <br/>
+    <table class="table table-bordered">
+        <tr>
+            <th>Num</th>
+            <th>Date</th>
+            <th>Détails</th>
+        </tr>
+        {% for commande in commandes %}
+            <tr>
+                <td>{{ commande.id }}</td>
+                <td>{{ commande.createdAt | date }}</td>
+                <td>
+                    <a href="{{ path('acmaintenance_commande_archive_show', {'id': commande.id}) }}">Détails</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+
+{% endblock %}

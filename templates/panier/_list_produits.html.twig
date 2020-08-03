@@ -1,0 +1,33 @@
+<table class='table table-bordered table-hover'>
+    <thead>
+    <tr>
+        <th>Nom</th>
+        <th>Quantité</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for produitCommande in commande.produits %}
+        <tr>
+            <td>{{ produitCommande.produit.nom }}</td>
+            <td>
+                <input style="width: 5em;" type="number" id="commande_quantite_{{ produitCommande.id }}"
+                       data-commande="{{ produitCommande.id }}"
+                       name="quantite" required="required"
+                       value="{{ produitCommande.quantite }}"
+                       class="form-control quantite-control">
+            </td>
+            <td>
+                <a href="#" data-produit="{{ produitCommande.id }}" class="produit-control">
+                    <span class="glyphicon glyphicon-trash"></span> Supprimer
+                </a>
+            </td>
+        </tr>
+    {% endfor %}
+    <tr>
+        <td><strong>Total</strong></td>
+        <td>{{ commande.totalQuantite }}</td>
+        <td></td>
+    </tr>
+    </tbody>
+</table>

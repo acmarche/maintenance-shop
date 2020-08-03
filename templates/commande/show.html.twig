@@ -1,0 +1,41 @@
+{% extends '@AcMarcheMaintenanceShop/layout.html.twig' %}
+
+{% block body %}
+ <div class="page-header">
+        <h3>Détails commande num {{ commande.id }}</h3>
+    </div>
+
+    <h4 class="text-success">Commande crée le {{ commande.createdAt | date('d-m-Y H:i') }}</h4>
+
+    <div id="result"></div>
+
+    <strong>Pour {{ commande.nom }} {{ commande.prenom }} à {{ commande.lieu }}</strong>
+    <br /><br />
+
+        <table class='table table-bordered table-hover'>
+            <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Quantité</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for produitCommande in commande.produits %}
+                <tr>
+                    <td>{{ produitCommande.produit.nom }}</td>
+                    <td>
+                       {{ produitCommande.quantite }}
+                    </td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td><strong>Total</strong></td>
+                <td>{{ commande.totalQuantite }}</td>
+            </tr>
+            </tbody>
+        </table>
+
+    {{ commande.commentaire | nl2br }}
+    <br /><br />
+{% endblock %}
+

@@ -1,0 +1,33 @@
+{
+  "name": "acmarche/maintenance-shop",
+  "description": "Gestion et commande des produits d'entretiens",
+  "homepage": "https://github.com/acmarche/maintenance-shop",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Jean-François Sénéchal",
+      "email": "informatique@marche.be",
+      "homepage": "http://cst.marche.be",
+      "role": "Developer"
+    }
+  ],
+  "type": "symfony-bundle",
+  "require": {
+    "php": "^7.2.5",
+    "h4cc/wkhtmltopdf-amd64": "^0.12.4",
+    "knplabs/doctrine-behaviors": "^2.0",
+    "knplabs/knp-snappy-bundle": "^1.7",
+    "liip/imagine-bundle": "^2.3",
+    "phpoffice/phpspreadsheet": "^1.14"
+  },
+  "autoload": {
+    "psr-4": {
+      "AcMarche\\MaintenanceShop\\": "src/AcMarche/MaintenanceShop/src"
+    }
+  },
+  "extra": {
+    "symfony": {
+      "allow-contrib": true
+    }
+  }
+}

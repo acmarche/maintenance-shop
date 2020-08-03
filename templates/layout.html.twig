@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{% block title %}Taxes{% endblock %}</title>
+    <link rel="icon" type="image/x-icon" href="{{ asset('bundles/taxe/favicon.ico') }}"/>
+    {% block stylesheets %}{% endblock %}
+
+    <link href="{{ asset('bundles/taxe/css/app.css') }}" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css"
+          integrity="sha384-SI27wrMjH3ZZ89r4o+fGIJtnzkAnFs3E4qz9DIYioCQ5l9Rd/7UAa8DHcaL8jkWt" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/50e40e2735.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    {% block head_scripts %}{% endblock %}
+</head>
+<body>
+{# MENU TOP #}
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+
+    {% block brand %}
+        <a class="navbar-brand" href="{{ path('taxe_home') }}">Taxes</a>
+    {% endblock %}
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04"
+            aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="container">
+        <div class="collapse navbar-collapse" id="navbarsExample04">
+            <ul class="navbar-nav mr-auto">
+                {% block menu_top %}
+                {% endblock %}
+            </ul>
+            <ul class="navbar-nav">
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    {% block menu_user %}
+                        {% include '@Taxe/_menu.html.twig' %}
+                    {% endblock %}
+                     <li class="nav-item">
+                        <a href="{{ path('taxe_home') }}" class="nav-link" title="Se déconnecter"><i
+                                    class="fas fa-sign-out-alt"></i></a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a href="{{ path('taxe_home') }}" class="nav-link" title="Se connecter"><i
+                                    class="fas fa-sign-in-alt"></i></a>
+                    </li>
+                {% endif %}
+            </ul>
+            <form class="form-inline my-2 my-md-0">
+                <!--   <input class="form-control" type="text" placeholder="{{ 'placeholder.search'|trans }}"> -->
+            </form>
+        </div>
+    </div>
+</nav>
+{# END MENU TOP #}
+<main role="main" class="container pt-3">
+
+    {% include '@Taxe/_flash_messages.html.twig' %}
+
+    {% block body %}
+
+    {% endblock %}
+</main>
+
+{% block footer %}
+    <footer class="mb-5 hidden-print">
+
+    </footer>
+{% endblock %}
+
+{% block javascripts %}{% endblock %}
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/js/bootstrap.min.js"
+        integrity="sha384-3qaqj0lc6sV/qpzrc1N5DC6i1VRn/HyX4qdPaiEFbn54VjQBEU341pvjz7Dv3n6P"
+        crossorigin="anonymous"></script>
+{% block scripts %}
+
+{% endblock %}
+</body>
+</html>
+

@@ -1,0 +1,38 @@
+{% set action = app.request.attributes.get("_route") %}
+
+<li>
+    <a href="{{ path('acmaintenance_commande') }}">
+        <span class="glyphicon glyphicon-plus"></span> Nouvelle commande
+    </a>
+</li>
+
+<li>
+    <a href="{{ path('acmaintenance_panier') }}">
+        <span class="glyphicon glyphicon-shopping-cart"></span> Panier
+    </a>
+</li>
+
+{% if is_granted('ROLE_MAINTENANCE_ADMIN') %}
+    <li>
+        <a href="{{ path('acmaintenance_produit') }}">
+            <span class="glyphicon glyphicon-search"></span> Rechercher un produit
+        </a>
+    </li>
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Paramètres... <b
+                    class="caret"></b></a>
+        <ul class="dropdown-menu">
+            <li><a href="{{ path('acmaintenance_produit_new') }}">Ajouter un produit</a></li>
+            <li><a href="{{ path('acmaintenance_commande_archive') }}">Archives commandes</a></li>
+            <li><a href="{{ path('acmaintenance_categorie') }}">Les catégories</a></li>
+            <li><a href="{{ path('acsecurity_user_index') }}">Gestion des utilisateurs</a></li>
+        </ul>
+    </li>
+{% endif %}
+
+{% if not app.user %}
+    <li>
+        <a href="{{ path('fos_user_security_login') }}">
+            <span class="glyphicon glyphicon-log-in"></span> Connexion</a>
+    </li>
+{% endif %}
