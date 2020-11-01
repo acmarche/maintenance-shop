@@ -15,4 +15,14 @@ class DefaultController extends AbstractController
     {
         return $this->render('@AcMarcheMaintenanceShop/default/index.html.twig');
     }
+
+    /**
+     * @Route("/bug", name="acmaintenance_bug", methods={"GET"})
+     */
+    public function bug()
+    {
+        $propoer = null;
+        $propoer->findAll();
+        return $this->render('@AcMarcheMaintenanceShop/default/index.html.twig');
+    }
 }
