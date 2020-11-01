@@ -28,7 +28,8 @@
         <p class="text-warning">Aucun produit</p>
     {% endif %}
 
-    <a href="{{ path('acmaintenance_categorie_show', { 'id': categorie.id }) }}">
+    <br />
+    <a href="{{ path('acmaintenance_categorie_show', { 'id': categorie.id }) }}" class="mt-2">
         <span class="glyphicon glyphicon-list"></span> Retour à la catégorie
     </a>
 

@@ -8,7 +8,7 @@
     <h4 class="text-success">Catégorie:</h4>
     <p><strong>{{ produit.categorie }}</strong></p>
 
-    {% include '@AcMarcheMaintenanceShop/produit/actions.html.twig' with {'produit': produit } %}
+    {% include '@AcMarcheMaintenanceShop/produit/actions.html.twig' %}
 
-    {% include '@AcMarcheMaintenanceShop/produit/delete.html.twig' with {'delete_form': delete_form } %}
+    {% include '@AcMarcheMaintenanceShop/produit/delete.html.twig' %}
 {% endblock %}

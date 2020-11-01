@@ -60,4 +60,9 @@ class ProduitRepository extends ServiceEntityRepository
 
         return $results;
     }
+
+    public function remove(Produit $produit)
+    {
+        $this->_em->remove($produit);
+    }
 }

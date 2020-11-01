@@ -1,11 +1,9 @@
-<div class="btn-toolbar" role="toolbar" style="margin: 0;">
-    <div class="btn-group">
-        <a href="{{ path('acmaintenance_produit') }}" class="btn btn-primary" role="button"><i
-                    class="fas fa-list"></i> Retour à la liste</a>
-    </div>
-    <div class="btn-group">
-        <a href="{{ path('acmaintenance_produit_edit', { 'id': produit.id }) }}" class="btn btn-primary" role="button"><i
-                    class="far fa-edit"></i> Editer</a>
-    </div>
-</div>
+<a href="{{ path('acmaintenance_produit') }}" class="btn btn-primary" role="button"><i
+            class="fas fa-list"></i> Retour à la liste</a>
+<a href="{{ path('acmaintenance_produit_edit', { 'id': produit.id }) }}" class="btn btn-primary" role="button"><i
+            class="far fa-edit"></i> Editer</a>
+
+<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">
+    <i class="fas fa-trash"></i> Supprimer le produit
+</button>
 <br/>

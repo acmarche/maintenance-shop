@@ -6,6 +6,7 @@ use AcMarche\MaintenanceShop\Entity\CommandeProduit;
 use AcMarche\MaintenanceShop\Entity\Produit;
 use AcMarche\MaintenanceShop\Form\ProduitType;
 use AcMarche\MaintenanceShop\Form\Search\SearchProduitType;
+use AcMarche\MaintenanceShop\Repository\ProduitRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -21,6 +22,16 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ProduitController extends AbstractController
 {
+    /**
+     * @var ProduitRepository
+     */
+    private $produitRepository;
+
+    public function __construct(ProduitRepository $produitRepository)
+    {
+        $this->produitRepository = $produitRepository;
+    }
+
     /**
      * Lists all Produit entities.
      *
@@ -119,13 +130,10 @@ class ProduitController extends AbstractController
      */
     public function show(Produit $produit)
     {
-        $deleteForm = $this->createDeleteForm($produit->getId());
-
         return $this->render(
             '@AcMarcheMaintenanceShop/produit/show.html.twig',
             array(
                 'produit' => $produit,
-                'delete_form' => $deleteForm->createView(),
             )
         );
     }
@@ -163,54 +171,22 @@ class ProduitController extends AbstractController
      *
      * @Route("/{id}", name="acmaintenance_produit_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, $id)
+    public function delete(Request $request, Produit $produit)
     {
-        $form = $this->createDeleteForm($id);
-        $form->handleRequest($request);
+        $em = $this->getDoctrine()->getManager();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository(Produit::class)->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Produit produit.');
-            }
-
-            $commandesProduit = $em->getRepository(CommandeProduit::class)->findBy(['produit' => $entity]);
+        if ($this->isCsrfTokenValid('delete'.$produit->getId(), $request->request->get('_token'))) {
+            $commandesProduit = $em->getRepository(CommandeProduit::class)->findBy(['produit' => $produit]);
             foreach ($commandesProduit as $commandeProduit) {
                 $em->remove($commandeProduit);
             }
 
-            $em->remove($entity);
+            $this->produitRepository->remove($produit);
             $em->flush();
-
             $this->addFlash('success', 'Le produit a bien été supprimé.');
         }
 
         return $this->redirectToRoute('acmaintenance_produit');
-    }
-
-    /**
-     * Creates a form to delete a Produit produit by id.
-     *
-     * @param mixed $id The produit id
-     *
-     * @return \Symfony\Component\Form\FormInterface The form
-     */
-    private function createDeleteForm($id)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('acmaintenance_produit_delete', array('id' => $id)))
-            ->setMethod('DELETE')
-            ->add(
-                'submit',
-                SubmitType::class,
-                array(
-                    'label' => 'Delete',
-                    'attr' => array('class' => 'btn-danger'),
-                )
-            )
-            ->getForm();
     }
 
 }
