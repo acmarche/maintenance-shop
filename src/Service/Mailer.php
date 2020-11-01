@@ -4,27 +4,24 @@ namespace AcMarche\MaintenanceShop\Service;
 
 use AcMarche\MaintenanceShop\Entity\Commande;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Mailer\MailerInterface;
 
-Class Mailer
+class Mailer
 {
     /**
-     * @var string
+     * @var MailerInterface
      */
-    private $from;
+    private $mailer;
     /**
-     * @var array
+     * @var ParameterBagInterface
      */
-    private $to;
+    private $parameterBag;
 
-    public function __construct(
-        MailerInterface $mailer,
-        string $from,
-        array $to
-    ) {
+    public function __construct(MailerInterface $mailer, ParameterBagInterface $parameterBag)
+    {
         $this->mailer = $mailer;
-        $this->from = $from;
-        $this->to = $to;
+        $this->parameterBag = $parameterBag;
     }
 
     /**
@@ -35,8 +32,8 @@ Class Mailer
     {
         $mail = (new TemplatedEmail())
             ->subject("Nouvelle commande de fournitures")
-            ->from($this->from)
-            ->to(...$this->to)
+            ->from($this->parameterBag->get('acmarche_maintenanceshop.email'))
+            ->to($this->parameterBag->get('acmarche_maintenance_shop.to1'))
             ->textTemplate('@AcMarcheMaintenanceShop/mail/commande.txt.twig')
             ->context(
                 array(
@@ -44,6 +41,10 @@ Class Mailer
                 )
             );
 
+        $to2 = $this->parameterBag->get('acmarche_maintenance_shop.to2');
+        if (filter_var($to2, FILTER_VALIDATE_EMAIL)) {
+            $mail->addTo($to2);
+        }
         $this->mailer->send($mail);
     }
 

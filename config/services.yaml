@@ -7,7 +7,8 @@
 # https://symfony.com/doc/current/service_container.html
 parameters:
   locale: 'fr'
-  acmarche_maintenance_shop.tos: ['%env(MAINTENANCE_SHOP_TOS)%']
+  acmarche_maintenance_shop.to1: '%env(MAINTENANCE_SHOP_TO1)%'
+  acmarche_maintenance_shop.to2: '%env(MAINTENANCE_SHOP_TO2)%'
   acmarche_maintenanceshop.email: '%env(MAINTENANCE_SHOP_EMAIL)%'
 
 services:
@@ -31,7 +32,3 @@ services:
 
   # controllers are imported separately to make sure they're public
   # and have a tag that allows actions to type-hint services
-
-  AcMarche\MaintenanceShop\Service\Mailer:
-    $to: '%acmarche_maintenance_shop.tos%'
-    $from: '%acmarche_maintenanceshop.email%'
