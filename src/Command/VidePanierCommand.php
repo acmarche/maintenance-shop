@@ -10,6 +10,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 class VidePanierCommand extends Command
 {
     /**
+     * @var string
+     */
+    protected static $defaultName = 'commande:vider-panier';
+
+    /**
      * @var CommandeRepository
      */
     private $commandeRepository;
@@ -23,7 +28,6 @@ class VidePanierCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('acmaintenance:viderpanier')
             ->setDescription('Vide le panier');
     }
 
@@ -33,7 +37,8 @@ class VidePanierCommand extends Command
         if ($commande) {
             $this->commandeRepository->remove($commande);
         }
-        return 0;
+
+        return Command::SUCCESS;
     }
 
 }

@@ -19,10 +19,10 @@
             </tr>
             </thead>
             <tbody>
-            {% for entity in entities %}
+            {% for categorie in entities %}
                 <tr>
-                    <td><a href="{{ path('acmaintenance_categorie_show', { 'id': entity.id }) }}">{{ entity }}</a></td>
-                    <td>{{ entity.produits | length }}</td>
+                    <td><a href="{{ path('acmaintenance_categorie_show', { 'id': categorie.id }) }}">{{ categorie }}</a></td>
+                    <td>{{ categorie.produits | length }}</td>
                 </tr>
             {% endfor %}
             </tbody>

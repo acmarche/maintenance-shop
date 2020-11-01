@@ -23,7 +23,7 @@ class CategorieController extends AbstractController
 {
 
     /**
-     * Lists all Categorie entities.
+     * Lists all Categorie categories.
      *
      * @Route("/", name="acmaintenance_categorie", methods={"GET"})
      */
@@ -36,13 +36,13 @@ class CategorieController extends AbstractController
         return $this->render(
             '@AcMarcheMaintenanceShop/categorie/index.html.twig',
             array(
-                'entities' => $entities,
+                'categories' => $entities,
             )
         );
     }
 
     /**
-     * Displays a form to create a new Categorie entity.
+     * Displays a form to create a new Categorie categorie.
      *
      * @Route("/new", name="acmaintenance_categorie_new", methods={"GET","POST"})
      */
@@ -68,14 +68,14 @@ class CategorieController extends AbstractController
         return $this->render(
             '@AcMarcheMaintenanceShop/categorie/new.html.twig',
             array(
-                'entity' => $entity,
+                'categorie' => $entity,
                 'form' => $form->createView(),
             )
         );
     }
 
     /**
-     * Finds and displays a Categorie entity.
+     * Finds and displays a Categorie categorie.
      *
      * @Route("/{id}", name="acmaintenance_categorie_show", methods={"GET"})
      */
@@ -86,14 +86,14 @@ class CategorieController extends AbstractController
         return $this->render(
             '@AcMarcheMaintenanceShop/categorie/show.html.twig',
             array(
-                'entity' => $categorie,
+                'categorie' => $categorie,
                 'delete_form' => $deleteForm->createView(),
             )
         );
     }
 
     /**
-     * Displays a form to edit an existing Categorie entity.
+     * Displays a form to edit an existing Categorie categorie.
      *
      * @Route("/{id}/edit", name="acmaintenance_categorie_edit", methods={"GET","POST"})
      */
@@ -115,14 +115,14 @@ class CategorieController extends AbstractController
         return $this->render(
             '@AcMarcheMaintenanceShop/categorie/edit.html.twig',
             array(
-                'entity' => $categorie,
+                'categorie' => $categorie,
                 'edit_form' => $editForm->createView(),
             )
         );
     }
 
     /**
-     * Deletes a Categorie entity.
+     * Deletes a Categorie categorie.
      *
      * @Route("/{id}", name="acmaintenance_categorie_delete", methods={"DELETE"})
      */
@@ -144,9 +144,9 @@ class CategorieController extends AbstractController
     }
 
     /**
-     * Creates a form to delete a Categorie entity by id.
+     * Creates a form to delete a Categorie categorie by id.
      *
-     * @param mixed $id The entity id
+     * @param mixed $id The categorie id
      *
      * @return \Symfony\Component\Form\FormInterface The form
      */
@@ -196,7 +196,7 @@ class CategorieController extends AbstractController
 
         return $this->render(
             '@AcMarcheMaintenanceShop/categorie/trier.html.twig',
-            array('entity' => $categorie)
+            array('categorie' => $categorie)
         );
     }
 

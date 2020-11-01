@@ -44,7 +44,7 @@ class CommandeController extends AbstractController
         //to delete ?
         $form = $this->createForm(CommandeType::class);
 
-        $entities = array();
+        $produits = array();
         $search_form->handleRequest($request);
 
         if ($search_form->isSubmitted() && $search_form->isValid()) {
@@ -59,7 +59,7 @@ class CommandeController extends AbstractController
             $data = $search_form->getData();
             $session->set($key, serialize($data));
             $search = true;
-            $entities = $em->getRepository(Produit::class)->search($data);
+            $produits = $em->getRepository(Produit::class)->search($data);
         }
 
         return $this->render(
@@ -67,7 +67,7 @@ class CommandeController extends AbstractController
             'search' => $search,
             'search_form' => $search_form->createView(),
             'form' => $form->createView(),
-            'entities' => $entities,
+            'produits' => $produits,
         ));
     }
 

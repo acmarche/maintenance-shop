@@ -1,0 +1,19 @@
+security:
+  encoders:
+    AcMarche\MaintenanceShop\Entity:
+      algorithm: auto
+
+  providers:
+    sql_provider:
+      entity:
+        class: AcMarche\MaintenanceShop\Entity
+        property: username
+  firewalls:
+    main:
+      anonymous: lazy
+      provider: sql_provider
+      guard:
+        authenticators:
+          - AcMarche\MaintenanceShop\Security\CommandeAuthenticator
+      logout:
+        path: app_logout

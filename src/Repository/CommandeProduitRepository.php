@@ -4,7 +4,7 @@ namespace AcMarche\MaintenanceShop\Repository;
 
 use AcMarche\MaintenanceShop\Entity\CommandeProduit;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method CommandeProduit|null find($id, $lockMode = null, $lockVersion = null)

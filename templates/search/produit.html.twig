@@ -2,28 +2,10 @@
 
     {{ form_start(search_form, { 'attr': {'class': 'form-inline'}}) }}
     {{ form_errors(search_form) }}
-
-    <div class="form-group">
-        <div class="input-group">
-            <div class="input-group-addon"><span class="glyphicon glyphicon-filter"></span></div>
-            {{ form_widget(search_form.nom) }}
-        </div>
-
-        <div class="input-group">
-            <div class="input-group-addon"><span class="glyphicon glyphicon-filter"></span></div>
-            {{ form_widget(search_form.categorie) }}
-        </div>
-
-        <div class="input-group">
-            {{ form_row(search_form.submit) }}
-        </div>
-
-        <div class="input-group">
-            {{ form_row(search_form.raz) }}
-        </div>
-
-    </div>
-
+    {{ form_row(search_form.nom, {label_attr: {class: 'sr-only'}, attr:{'class': ' my-1 mr-sm-2'} }) }}
+    {{ form_row(search_form.categorie, {label_attr: {class: 'sr-only'}, attr:{'class': ' my-1 mr-sm-2'} }) }}
+    <input type="submit" class="btn btn-primary mr-1" value="Rechercher" name="submit">
+    {{ form_row(search_form.raz, {label_attr: {class: 'sr-only'}, attr:{'class': ' my-1 mr-sm-2'} }) }}
     {{ form_end(search_form) }}
 
 </div>

@@ -47,7 +47,7 @@ class ProduitController extends AbstractController
             )
         );
 
-        $entities = array();
+        $produits = array();
         $search_form->handleRequest($request);
 
         if ($search_form->isSubmitted() && $search_form->isValid()) {
@@ -61,7 +61,7 @@ class ProduitController extends AbstractController
             $data = $search_form->getData();
             $session->set($key, serialize($data));
             $search = true;
-            $entities = $em->getRepository(Produit::class)->search($data);
+            $produits = $em->getRepository(Produit::class)->search($data);
         }
 
         return $this->render(
@@ -69,13 +69,13 @@ class ProduitController extends AbstractController
             array(
                 'search' => $search,
                 'search_form' => $search_form->createView(),
-                'entities' => $entities,
+                'produits' => $produits,
             )
         );
     }
 
     /**
-     * Displays a form to create a new Produit entity.
+     * Displays a form to create a new Produit produit.
      *
      * @Route("/new", name="acmaintenance_produit_new", methods={"GET","POST"})
      */
@@ -106,14 +106,14 @@ class ProduitController extends AbstractController
         return $this->render(
             '@AcMarcheMaintenanceShop/produit/new.html.twig',
             array(
-                'entity' => $entity,
+                'produit' => $entity,
                 'form' => $form->createView(),
             )
         );
     }
 
     /**
-     * Finds and displays a Produit entity.
+     * Finds and displays a Produit produit.
      *
      * @Route("/{id}", name="acmaintenance_produit_show", methods={"GET"})
      */
@@ -124,14 +124,14 @@ class ProduitController extends AbstractController
         return $this->render(
             '@AcMarcheMaintenanceShop/produit/show.html.twig',
             array(
-                'entity' => $produit,
+                'produit' => $produit,
                 'delete_form' => $deleteForm->createView(),
             )
         );
     }
 
     /**
-     * Displays a form to edit an existing Produit entity.
+     * Displays a form to edit an existing Produit produit.
      *
      * @Route("/{id}/edit", name="acmaintenance_produit_edit", methods={"GET","POST"})
      */
@@ -152,14 +152,14 @@ class ProduitController extends AbstractController
         return $this->render(
             '@AcMarcheMaintenanceShop/produit/edit.html.twig',
             array(
-                'entity' => $produit,
+                'produit' => $produit,
                 'edit_form' => $editForm->createView(),
             )
         );
     }
 
     /**
-     * Deletes a Produit entity.
+     * Deletes a Produit produit.
      *
      * @Route("/{id}", name="acmaintenance_produit_delete", methods={"DELETE"})
      */
@@ -173,7 +173,7 @@ class ProduitController extends AbstractController
             $entity = $em->getRepository(Produit::class)->find($id);
 
             if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Produit entity.');
+                throw $this->createNotFoundException('Unable to find Produit produit.');
             }
 
             $commandesProduit = $em->getRepository(CommandeProduit::class)->findBy(['produit' => $entity]);
@@ -191,9 +191,9 @@ class ProduitController extends AbstractController
     }
 
     /**
-     * Creates a form to delete a Produit entity by id.
+     * Creates a form to delete a Produit produit by id.
      *
-     * @param mixed $id The entity id
+     * @param mixed $id The produit id
      *
      * @return \Symfony\Component\Form\FormInterface The form
      */

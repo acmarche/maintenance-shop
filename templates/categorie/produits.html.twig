@@ -1,10 +1,10 @@
 <h3>Liste des produits</h3>
 
-{% if entity.produits | length > 0 %}
+{% if categorie.produits | length > 0 %}
     <ul class="list-group">
-        {% for entity in entity.produits %}
+        {% for categorie in categorie.produits %}
 
-            <li class="list-group-item"><a href="{{ path('acmaintenance_produit_show', { 'id': entity.id }) }}">{{ entity }}</a></li>
+            <li class="list-group-item"><a href="{{ path('acmaintenance_produit_show', { 'id': categorie.id }) }}">{{ categorie }}</a></li>
 
         {% endfor %}
     </ul>

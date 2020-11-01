@@ -1,7 +1,7 @@
 {% extends '@AcMarcheMaintenanceShop/layout.html.twig' %}
 
 {% block body %}
- <div class="page-header">
+    <div class="page-header">
         <h3>Détails commande num {{ commande.id }}</h3>
     </div>
 
@@ -10,32 +10,32 @@
     <div id="result"></div>
 
     <strong>Pour {{ commande.nom }} {{ commande.prenom }} à {{ commande.lieu }}</strong>
-    <br /><br />
+    <br/><br/>
 
-        <table class='table table-bordered table-hover'>
-            <thead>
+    <table class='table table-bordered table-hover'>
+        <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Quantité</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for produitCommande in commande.produits %}
             <tr>
-                <th>Nom</th>
-                <th>Quantité</th>
+                <td>{{ produitCommande.produit.nom }}</td>
+                <td>
+                    {{ produitCommande.quantite }}
+                </td>
             </tr>
-            </thead>
-            <tbody>
-            {% for produitCommande in commande.produits %}
-                <tr>
-                    <td>{{ produitCommande.produit.nom }}</td>
-                    <td>
-                       {{ produitCommande.quantite }}
-                    </td>
-                </tr>
-            {% endfor %}
-            <tr>
-                <td><strong>Total</strong></td>
-                <td>{{ commande.totalQuantite }}</td>
-            </tr>
-            </tbody>
-        </table>
+        {% endfor %}
+        <tr>
+            <td><strong>Total</strong></td>
+            <td>{{ commande.totalQuantite }}</td>
+        </tr>
+        </tbody>
+    </table>
 
     {{ commande.commentaire | nl2br }}
-    <br /><br />
+    <br/><br/>
 {% endblock %}
 

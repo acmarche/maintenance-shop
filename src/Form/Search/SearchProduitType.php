@@ -51,19 +51,12 @@ class SearchProduitType extends AbstractType
                 )
             )
             ->add(
-                'submit',
-                SubmitType::class,
-                array(
-                    'label' => 'Rechercher',
-                )
-            )
-            ->add(
                 'raz',
                 SubmitType::class,
                 array(
                     'label' => 'Raz',
                     'attr' => array(
-                        'class' => 'btn-sm btn-info',
+                        'class' => 'btn-sm btn-default',
                         'title' => 'Réinitialiser la recherche',
                     ),
                 )

@@ -8,11 +8,11 @@
     {% include '@AcMarcheMaintenanceShop/search/produit.html.twig' with {'form': search_form } %}
 
     <br/>
-    {% if search and entities | length == 0 %}
+    {% if search and produits | length == 0 %}
         <p class="text-warning">Aucun produit trouvé</p>
     {% endif %}
 
-    {% if entities | length > 0 %}
+    {% if produits | length > 0 %}
         <table class='table table-bordered table-hover'>
             <thead>
             <tr>
@@ -21,10 +21,10 @@
             </tr>
             </thead>
             <tbody>
-            {% for entity in entities %}
+            {% for produit in produits %}
                 <tr>
-                    <td><a href="{{ path('acmaintenance_produit_show', { 'id': entity.id }) }}">{{ entity }}</a></td>
-                    <td>{{ entity.categorie }}</td>
+                    <td><a href="{{ path('acmaintenance_produit_show', { 'id': produit.id }) }}">{{ produit }}</a></td>
+                    <td>{{ produit.categorie }}</td>
                 </tr>
             {% endfor %}
             </tbody>

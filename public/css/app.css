@@ -1,0 +1,8 @@
+body {
+    padding-top: 4rem;
+}
+
+label.required:after {
+    content: " *";
+    color: red;
+}

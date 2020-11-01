@@ -4,6 +4,7 @@ namespace AcMarche\MaintenanceShop\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
@@ -12,7 +13,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
  *
  * @see http://symfony.com/doc/current/cookbook/bundles/extension.html
  */
-class AcMarcheMaintenanceShopExtension extends Extension
+class AcMarcheMaintenanceShopExtension extends Extension implements PrependExtensionInterface
 {
     /**
      * {@inheritdoc}

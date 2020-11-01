@@ -2,7 +2,7 @@
 
 {% block body %}
     <div class="page-header">
-        <h3>Trier les produits pour la catégorie {{ entity }}</h3>
+        <h3>Trier les produits pour la catégorie {{ categorie }}</h3>
     </div>
 
     <br/>
@@ -15,9 +15,9 @@
 
     </div>
 
-    {% if entity.produits | length > 0 %}
+    {% if categorie.produits | length > 0 %}
         <ul class="list-group" id="sortable">
-            {% for produit in entity.produits %}
+            {% for produit in categorie.produits %}
 
                 <li id="produits-{{ produit.id }}" class="list-group-item"><span
                             class="glyphicon glyphicon-sort"></span> {{ produit }}</li>
@@ -28,7 +28,7 @@
         <p class="text-warning">Aucun produit</p>
     {% endif %}
 
-    <a href="{{ path('acmaintenance_categorie_show', { 'id': entity.id }) }}">
+    <a href="{{ path('acmaintenance_categorie_show', { 'id': categorie.id }) }}">
         <span class="glyphicon glyphicon-list"></span> Retour à la catégorie
     </a>
 
@@ -52,7 +52,7 @@
                     serial = $(this).sortable('serialize');
                     // Appelle une action en ajax
                     $.ajax({
-                        url: '{{ path('acmaintenance_categorie_trier', {'id' : entity.id}) }}',
+                        url: '{{ path('acmaintenance_categorie_trier', {'id' : categorie.id}) }}',
                         type: "post",
                         data: serial,
                         success: function (html) {

@@ -8,35 +8,35 @@
     {% include '@AcMarcheMaintenanceShop/search/produit.html.twig' with {'form': search_form } %}
 
     <br/>
-    {% if search and entities | length == 0 %}
+    {% if search and produits | length == 0 %}
         <p class="text-warning">Aucun produit trouvé</p>
     {% endif %}
 
-    {% if entities | length > 0 %}
+    {% if produits | length > 0 %}
         {{ form_start(form, { 'attr': {'class': 'form-inline'}}) }}
         {{ form_errors(form) }}
 
         <ul class="list-group">
-            {% for entity in entities %}
+            {% for produit in produits %}
                 <li class="list-group-item clearfix">
 
-                    <h5 class="text-success">{{ entity.nom }} <span class="text-muted">{{ entity.description }}</span></h5>
+                    <h5 class="text-success">{{ produit.nom }} <span class="text-muted">{{ produit.description }}</span></h5>
 
                     <div class="form-group">
-                        <label for="commande_quantite_{{ entity.id }}">Quantité</label>
-                        <input type="number" id="commande_quantite_{{ entity.id }}" name="quantite" required="required"
+                        <label for="commande_quantite_{{ produit.id }}">Quantité</label>
+                        <input type="number" id="commande_quantite_{{ produit.id }}" name="quantite" required="required"
                                value="1"
                                class="form-control">
                     </div>
 
                     <div class="form-group">
-                        <button type="button" name="commande[submit]" data-produit="{{ entity.id }}"
+                        <button type="button" name="commande[submit]" data-produit="{{ produit.id }}"
                                 class="btn-default btn bouton-add">
                             Ajouter
                         </button>
                     </div>
 
-                    <div id="commande_result_{{ entity.id }}" class="form-group" style="margin-left: 20px;">
+                    <div id="commande_result_{{ produit.id }}" class="form-group" style="margin-left: 20px;">
 
                     </div>
 
