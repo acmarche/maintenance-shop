@@ -1,15 +1,11 @@
-<div class="btn-toolbar" role="toolbar" style="margin: 0;">
-    <div class="btn-group">
-        <a href="{{ path('acmaintenance_categorie') }}" class="btn btn-primary" role="button"><i
-                    class="glyphicon glyphicon-list"></i> Retour à la liste</a>
-    </div>
-    <div class="btn-group">
-        <a href="{{ path('acmaintenance_categorie_edit', { 'id': categorie.id }) }}" class="btn btn-primary" role="button"><i
-                    class="glyphicon glyphicon-edit"></i> Editer</a>
-    </div>
-    <div class="btn-group">
-        <a href="{{ path('acmaintenance_categorie_trier', { 'id': categorie.id }) }}" class="btn btn-primary" role="button"><i
-                    class="glyphicon glyphicon-sort"></i> Trier les produits</a>
-    </div>
-</div>
+<a href="{{ path('acmaintenance_categorie') }}" class="btn btn-primary" role="button"><i
+            class="fas fa-list"></i> Retour à la liste</a>
+<a href="{{ path('acmaintenance_categorie_edit', { 'id': categorie.id }) }}" class="btn btn-primary"
+   role="button"><i
+            class="far fa-edit"></i> Editer</a>
+<a href="{{ path('acmaintenance_categorie_trier', { 'id': categorie.id }) }}" class="btn btn-primary" role="button"><i
+            class="fas fa-sort"></i> Trier les produits</a>
+<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">
+    <i class="fas fa-trash"></i> Supprimer la catégorie
+</button>
 <br/>

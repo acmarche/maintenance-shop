@@ -6,7 +6,7 @@ use AcMarche\MaintenanceShop\Entity\CommandeProduit;
 use AcMarche\MaintenanceShop\Entity\Produit;
 use AcMarche\MaintenanceShop\Form\ProduitType;
 use AcMarche\MaintenanceShop\Form\Search\SearchProduitType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * Produit controller.
  *
  * @Route("/produit")
- * @Security("has_role('ROLE_MAINTENANCE_ADMIN')")
+ * @IsGranted("ROLE_MAINTENANCE_ADMIN")
  */
 class ProduitController extends AbstractController
 {

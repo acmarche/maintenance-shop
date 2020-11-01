@@ -5,7 +5,8 @@ namespace AcMarche\MaintenanceShop\Controller;
 use AcMarche\MaintenanceShop\Entity\Categorie;
 use AcMarche\MaintenanceShop\Entity\Produit;
 use AcMarche\MaintenanceShop\Form\CategorieType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use AcMarche\MaintenanceShop\Repository\CategorieRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,10 +18,19 @@ use Symfony\Component\Routing\Annotation\Route;
  * Categorie controller.
  *
  * @Route("/categorie")
- * @Security("has_role('ROLE_MAINTENANCE_ADMIN')")
+ * @IsGranted("ROLE_MAINTENANCE_ADMIN")
  */
 class CategorieController extends AbstractController
 {
+    /**
+     * @var CategorieRepository
+     */
+    private $categorieRepository;
+
+    public function __construct(CategorieRepository $categorieRepository)
+    {
+        $this->categorieRepository = $categorieRepository;
+    }
 
     /**
      * Lists all Categorie categories.
@@ -81,13 +91,10 @@ class CategorieController extends AbstractController
      */
     public function show(Categorie $categorie)
     {
-        $deleteForm = $this->createDeleteForm($categorie->getId());
-
         return $this->render(
             '@AcMarcheMaintenanceShop/categorie/show.html.twig',
             array(
                 'categorie' => $categorie,
-                'delete_form' => $deleteForm->createView(),
             )
         );
     }
@@ -99,7 +106,7 @@ class CategorieController extends AbstractController
      */
     public function edit(Request $request, Categorie $categorie)
     {
-        $editForm = $this->createForm(CategorieType::class, $categorie, ['method' => 'PUT'])
+        $editForm = $this->createForm(CategorieType::class, $categorie)
             ->add('Update', SubmitType::class);
 
         $editForm->handleRequest($request);
@@ -128,42 +135,13 @@ class CategorieController extends AbstractController
      */
     public function delete(Request $request, Categorie $categorie)
     {
-        $form = $this->createDeleteForm($categorie->getId());
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-
-            $em->remove($categorie);
-            $em->flush();
-
-            $this->addFlash('success', 'La catégorie a bien été supprimée.');
+        if ($this->isCsrfTokenValid('delete'.$categorie->getId(), $request->request->get('_token'))) {
+            $this->categorieRepository->remove($categorie);
+            $this->categorieRepository->flush();
+            $this->addFlash('success', "La catégorie a bien été supprimée");
         }
 
         return $this->redirectToRoute('acmaintenance_categorie');
-    }
-
-    /**
-     * Creates a form to delete a Categorie categorie by id.
-     *
-     * @param mixed $id The categorie id
-     *
-     * @return \Symfony\Component\Form\FormInterface The form
-     */
-    private function createDeleteForm($id)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('acmaintenance_categorie_delete', array('id' => $id)))
-            ->setMethod('DELETE')
-            ->add(
-                'submit',
-                SubmitType::class,
-                array(
-                    'label' => 'Delete',
-                    'attr' => array('class' => 'btn-danger'),
-                )
-            )
-            ->getForm();
     }
 
     /**

@@ -44,4 +44,14 @@ class CategorieRepository extends ServiceEntityRepository
 
         return $categories;
     }
+
+    public function remove(Categorie $categorie)
+    {
+        $this->_em->remove($categorie);
+    }
+
+    public function flush()
+    {
+        $this->_em->flush();
+    }
 }

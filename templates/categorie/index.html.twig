@@ -6,11 +6,11 @@
     </div>
 
     <a href="{{ path('acmaintenance_categorie_new') }}" class="btn btn-primary" role="button"><i
-                class="glyphicon glyphicon-plus"></i> Ajouter</a>
+                class="fas fa-plus"></i> Ajouter</a>
 
     <br/>   <br/>
 
-    {% if entities | length > 0 %}
+    {% if categories | length > 0 %}
         <table class='table table-bordered table-hover'>
             <thead>
             <tr>
@@ -19,7 +19,7 @@
             </tr>
             </thead>
             <tbody>
-            {% for categorie in entities %}
+            {% for categorie in categories %}
                 <tr>
                     <td><a href="{{ path('acmaintenance_categorie_show', { 'id': categorie.id }) }}">{{ categorie }}</a></td>
                     <td>{{ categorie.produits | length }}</td>
