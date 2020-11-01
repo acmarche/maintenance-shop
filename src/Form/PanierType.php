@@ -38,6 +38,7 @@ class PanierType extends AbstractType
                 TextType::class,
                 [
                     'required' => true,
+                    'help' => 'Lieu de livraison',
                 ]
             )
             ->add(
@@ -48,13 +49,6 @@ class PanierType extends AbstractType
                     'label' => '',
                     'attr' => ['rows' => 8],
                 ]
-            )
-            ->add(
-                'submit',
-                SubmitType::class,
-                array(
-                    'label' => 'Envoyer la commande',
-                )
             );
     }
 

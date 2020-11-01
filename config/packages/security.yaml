@@ -1,12 +1,12 @@
 security:
   encoders:
-    AcMarche\MaintenanceShop\Entity:
+    AcMarche\MaintenanceShop\Entity\User:
       algorithm: auto
 
   providers:
     sql_provider:
       entity:
-        class: AcMarche\MaintenanceShop\Entity
+        class: AcMarche\MaintenanceShop\Entity\User
         property: username
   firewalls:
     main:

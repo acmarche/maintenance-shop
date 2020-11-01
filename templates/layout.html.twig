@@ -38,12 +38,9 @@
             </ul>
             <ul class="navbar-nav">
                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                    {% block menu_user %}
-                        {% include '@AcMarcheMaintenanceShop/_menu.html.twig' %}
-                    {% endblock %}
                     <li class="nav-item">
                         <a href="{{ path('app_logout') }}" class="nav-link" title="Se déconnecter"><i
-                                    class="fas fa-sign-out-alt"></i></a>
+                                    class="fas fa-sign-out-alt"></i> {{ app.user }}</a>
                     </li>
                 {% else %}
                     <li class="nav-item">

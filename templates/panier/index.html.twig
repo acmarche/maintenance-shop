@@ -9,7 +9,7 @@
 
     {% if commande.totalQuantite > 0 %}
         <div id="result">
-            {% include '@AcMarcheMaintenanceShop/panier/_list_produits.html.twig' with {'commande': commande} %}
+            {% include '@AcMarcheMaintenanceShop/panier/_list_produits.html.twig' %}
         </div>
 
         {{ form_start(form, { 'attr': {'class': 'well'} }) }}
@@ -24,6 +24,8 @@
                 {{ form_row(form.commentaire) }}
             </div>
         </div>
+
+        <input type="submit" class="btn btn-primary mr-1" value="Valider le panier" name="submit">
 
         {{ form_end(form) }}
     {% else %}

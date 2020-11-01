@@ -80,8 +80,7 @@ class Categorie
 
     public function removeProduit(Produit $produit): self
     {
-        if ($this->produits->contains($produit)) {
-            $this->produits->removeElement($produit);
+        if ($this->produits->removeElement($produit)) {
             // set the owning side to null (unless already changed)
             if ($produit->getCategorie() === $this) {
                 $produit->setCategorie(null);

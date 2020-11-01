@@ -36,7 +36,7 @@ Class Mailer
         $mail = (new TemplatedEmail())
             ->subject("Nouvelle commande de fournitures")
             ->from($this->from)
-            ->to($this->to)
+            ->to(...$this->to)
             ->textTemplate('@AcMarcheMaintenanceShop/mail/commande.txt.twig')
             ->context(
                 array(

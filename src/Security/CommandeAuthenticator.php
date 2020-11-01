@@ -2,6 +2,7 @@
 
 namespace AcMarche\MaintenanceShop\Security;
 
+use AcMarche\MaintenanceShop\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -27,15 +28,21 @@ class CommandeAuthenticator extends AbstractFormLoginAuthenticator implements Pa
     private $urlGenerator;
     private $csrfTokenManager;
     private $passwordEncoder;
+    /**
+     * @var UserRepository
+     */
+    private $userRepository;
 
     public function __construct(
         UrlGeneratorInterface $urlGenerator,
         CsrfTokenManagerInterface $csrfTokenManager,
-        UserPasswordEncoderInterface $passwordEncoder
+        UserPasswordEncoderInterface $passwordEncoder,
+        UserRepository $userRepository
     ) {
         $this->urlGenerator = $urlGenerator;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->passwordEncoder = $passwordEncoder;
+        $this->userRepository = $userRepository;
     }
 
     public function supports(Request $request)
@@ -68,7 +75,7 @@ class CommandeAuthenticator extends AbstractFormLoginAuthenticator implements Pa
 
         // Load / create our user however you need.
         // You can do this by calling the user provider, or with custom logic here.
-        $user = $userProvider->loadUserByUsername($credentials['username']);
+        $user = $this->userRepository->loadUserByUsername($credentials['username']);
 
         if (!$user) {
             // fail authentication with a custom error

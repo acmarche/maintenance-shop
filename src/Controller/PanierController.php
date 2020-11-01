@@ -10,7 +10,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -19,7 +18,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class PanierController extends AbstractController
 {
-
     /**
      * @var Mailer
      */
@@ -31,7 +29,7 @@ class PanierController extends AbstractController
     }
 
     /**
-     * @Route("/", name="acmaintenance_panier", methods={"GET"})
+     * @Route("/", name="acmaintenance_panier", methods={"GET","POST"})
      */
     public function index(Request $request)
     {
@@ -78,10 +76,12 @@ class PanierController extends AbstractController
         }
 
         return $this->render(
-                '@AcMarcheMaintenanceShop/panier/index.html.twig',[
-            'commande' => $commande,
-            'form' => $form->createView(),
-        ]);
+            '@AcMarcheMaintenanceShop/panier/index.html.twig',
+            [
+                'commande' => $commande,
+                'form' => $form->createView(),
+            ]
+        );
     }
 
     /**
