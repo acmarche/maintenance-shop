@@ -1,0 +1,56 @@
+{% extends '@AcMarcheMaintenanceShop/layout.html.twig' %}
+
+{% block body -%}
+
+    <div class="card mb-3">
+        <div class="card-header">
+            <h3>Associés des produits à
+                <a href="{{ path('acmaintenance_produit_show', { 'id': produit.id }) }}">
+                    {{ produit }}
+                </a>
+            </h3>
+        </div>
+        <div class="card-body">
+
+            <div class="alert alert-info">
+                Rechercher plus rapidement en écrivant le nom
+            </div>
+
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+
+            <label for="produits-choice">Sélectionnez un produit:</label>
+            <input type="text" required="required" list="produits-list" id="produits-choice" name="produits-choice"
+                   class="form-control"/>
+
+            <datalist id="produits-list">
+                {% for produit in produits %}
+                    <option value="{{ produit.nom }}">{{ produit.nom }}</option>
+                {% endfor %}
+            </datalist>
+
+            <button class="btn btn-primary mr-1 mt-2" type="submit"><i class="far fa-save" aria-hidden="true"></i>
+                Associer
+            </button>
+            {{ form_end(form) }}
+
+            <hr/>
+            {% include '@AcMarcheMaintenanceShop/produit/_products_associated.html.twig' %}
+            {% include '@AcMarcheMaintenanceShop/produit_associate/_dissociate.html.twig' %}
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        $(".unlinkproduct").click(function () {
+            var associateId = $(this).attr("data-associateid");
+            var produitId = $(this).attr("data-produitid");
+            var relationToken = $(this).attr("data-token");
+            $("#associateId").val(associateId);
+            $("#produitId").val(produitId);
+            $("#relationtoken").val(relationToken);
+        });
+    </script>
+{% endblock %}

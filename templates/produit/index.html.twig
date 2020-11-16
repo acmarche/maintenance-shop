@@ -24,7 +24,11 @@
             <tbody>
             {% for produit in produits %}
                 <tr>
-                    <td><a href="{{ path('acmaintenance_produit_show', { 'id': produit.id }) }}">{{ produit }}</a></td>
+                    <td>
+                        <a href="{{ path('acmaintenance_produit_show', { 'id': produit.id }) }}">
+                            {{ produit }}
+                        </a>
+                    </td>
                     <td>{{ produit.categorie }}</td>
                     <td>{{ produit.unite }}</td>
                 </tr>

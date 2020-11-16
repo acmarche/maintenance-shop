@@ -2,6 +2,8 @@
 
 namespace AcMarche\MaintenanceShop\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
@@ -24,6 +26,7 @@ class Produit implements TimestampableInterface
     protected $id;
 
     /**
+     * @var string
      * @ORM\Column(type="string", nullable=false)
      * @ORM\OrderBy({"nom"="ASC"})
      * @Assert\NotBlank()
@@ -57,13 +60,21 @@ class Produit implements TimestampableInterface
      */
     protected $categorie;
 
+    /**
+     * @var Produit[]
+     * @ORM\ManyToMany(targetEntity="AcMarche\MaintenanceShop\Entity\Produit")
+     * @ORM\JoinTable(name="produits_associated")
+     */
+    protected $associatedProducts;
+
+    public function __construct()
+    {
+        $this->associatedProducts = new ArrayCollection();
+    }
+
     public function __toString()
     {
-        $txt = $this->nom;
-        if ($this->description)
-            $txt .= ' (' . $this->description . ')';
-
-        return $txt;
+       return $this->nom;
     }
 
     public function getId(): ?int
@@ -139,6 +150,30 @@ class Produit implements TimestampableInterface
     public function setUnite(?string $unite): self
     {
         $this->unite = $unite;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Produit[]
+     */
+    public function getAssociatedProducts(): Collection
+    {
+        return $this->associatedProducts;
+    }
+
+    public function addAssociatedProduct(Produit $associatedProduct): self
+    {
+        if (!$this->associatedProducts->contains($associatedProduct)) {
+            $this->associatedProducts[] = $associatedProduct;
+        }
+
+        return $this;
+    }
+
+    public function removeAssociatedProduct(Produit $associatedProduct): self
+    {
+        $this->associatedProducts->removeElement($associatedProduct);
 
         return $this;
     }

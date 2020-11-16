@@ -1,14 +1,30 @@
 {% extends '@AcMarcheMaintenanceShop/layout.html.twig' %}
 
 {% block body -%}
-    <div class="page-header">
-        <h3>{{ produit }}</h3>
+
+    <div class="card mb-3">
+        <div class="card-header">
+            <h3>{{ produit }}</h3>
+        </div>
+        <div class="card-body">
+            {% include '@AcMarcheMaintenanceShop/produit/actions.html.twig' %}
+            <br/>
+            <h4 class="text-success">Catégorie:
+                <strong>{{ produit.categorie }}</strong>
+            </h4>
+            <h4 class="text-success">Unité:
+                <strong>{{ produit.unite }}</strong>
+            </h4>
+
+            <p class="card-text">{{ produit.description }}</p>
+
+            {% include '@AcMarcheMaintenanceShop/produit/delete.html.twig' %}
+
+        </div>
+        <div class="card-footer">
+
+        </div>
     </div>
 
-    <h4 class="text-success">Catégorie:</h4>
-    <p><strong>{{ produit.categorie }}</strong></p>
 
-    {% include '@AcMarcheMaintenanceShop/produit/actions.html.twig' %}
-
-    {% include '@AcMarcheMaintenanceShop/produit/delete.html.twig' %}
 {% endblock %}

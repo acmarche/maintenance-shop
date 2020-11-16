@@ -1,0 +1,27 @@
+<h4 class="text-success mt-4">Produits actuellement associés</h4>
+<hr>
+<table class="table table-bordered">
+    {% for product in produit.associatedProducts %}
+        <tr>
+            <td>
+                <a href="{{ path('acmaintenance_produit_show', { 'id': produit.id }) }}">
+                    {{ product.nom }}
+                </a>
+            </td>
+            <td>
+                <button type="button" class="btn btn-outline-dark btn-sm unlinkproduct"
+                        data-associateid="{{ product.id }}"
+                        data-produitid="{{ produit.id }}"
+                        data-token="{{ csrf_token('delete' ~ product.id) }}"
+                        data-toggle="modal"
+                        data-target="#dissociateModal">
+                    <i class="fas fa-unlink"></i> Dissocier
+                </button>
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="2">Aucun</td>
+        </tr>
+    {% endfor %}
+</table>

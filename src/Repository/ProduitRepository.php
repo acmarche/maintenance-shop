@@ -35,7 +35,7 @@ class ProduitRepository extends ServiceEntityRepository
 
         if ($nom) {
             $qb->andWhere('produit.nom LIKE :mot OR produit.description LIKE :mot ')
-                ->setParameter('mot', '%' . $nom . '%');
+                ->setParameter('mot', '%'.$nom.'%');
         }
 
         if ($categorie) {
@@ -64,5 +64,10 @@ class ProduitRepository extends ServiceEntityRepository
     public function remove(Produit $produit)
     {
         $this->_em->remove($produit);
+    }
+
+    public function flush()
+    {
+        $this->_em->flush();
     }
 }
