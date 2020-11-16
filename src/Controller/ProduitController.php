@@ -94,8 +94,7 @@ class ProduitController extends AbstractController
     {
         $entity = new Produit();
         $form = $this->createForm(ProduitType::class, $entity)
-            ->add('saveAndCreateNew', SubmitType::class)
-            ->add('Create', SubmitType::class);
+            ->add('saveAndCreateNew', SubmitType::class);
 
         $form->handleRequest($request);
 
@@ -146,7 +145,6 @@ class ProduitController extends AbstractController
     public function edit(Request $request, Produit $produit)
     {
         $editForm = $this->createForm(ProduitType::class, $produit);
-        $editForm->add('Update', SubmitType::class);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
@@ -161,7 +159,7 @@ class ProduitController extends AbstractController
             '@AcMarcheMaintenanceShop/produit/edit.html.twig',
             array(
                 'produit' => $produit,
-                'edit_form' => $editForm->createView(),
+                'form' => $editForm->createView(),
             )
         );
     }

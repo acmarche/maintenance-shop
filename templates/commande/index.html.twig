@@ -15,34 +15,37 @@
     {% if produits | length > 0 %}
         {{ form_start(form, { 'attr': {'class': 'form-inline'}}) }}
         {{ form_errors(form) }}
+        <table class="table table-bordered">
 
-        <ul class="list-group">
             {% for produit in produits %}
-                <li class="list-group-item clearfix">
+                <tr>
+                    <td style="width: 70%;">
+                        <h5 class="text-success">{{ produit.nom }}
+                            {% if produit.unite %}
+                                <strong>(<i>{{ produit.unite }}</i>)</strong>
+                            {% endif %}
+                        </h5>
+                        <span class="text-muted">{{ produit.description }}</span>
+                        <br clear="all"/>
+                        <label class="my-1 mr-2" for="commande_quantite_{{ produit.id }}"
+                               style="text-align: left; justify-content:left; ">Quantité</label>
+                        <input type="number" id="commande_quantite_{{ produit.id }}" name="quantite" min="1" max="999"
+                               class="form-control mb-2 mr-sm-2 w-2566" required="required" value="1"
+                               placeholder="Quantité">
 
-                    <h5 class="text-success">{{ produit.nom }} <span class="text-muted">{{ produit.description }}</span></h5>
-
-                    <div class="form-group">
-                        <label for="commande_quantite_{{ produit.id }}">Quantité</label>
-                        <input type="number" id="commande_quantite_{{ produit.id }}" name="quantite" required="required"
-                               value="1"
-                               class="form-control">
-                    </div>
-
-                    <div class="form-group">
                         <button type="button" name="commande[submit]" data-produit="{{ produit.id }}"
                                 class="btn-primary btn bouton-add">
-                            <i class="fas fa-plus"></i>  Ajouter
+                            <i class="fas fa-plus"></i> Ajouter
                         </button>
-                    </div>
+                    </td>
+                    <td>
+                        <div id="commande_result_{{ produit.id }}" class="form-group" style="margin-left: 20px;">
 
-                    <div id="commande_result_{{ produit.id }}" class="form-group" style="margin-left: 20px;">
-
-                    </div>
-
-                </li>
+                        </div>
+                    </td>
+                </tr>
             {% endfor %}
-        </ul>
+        </table>
         {{ form_end(form) }}
     {% endif %}
 

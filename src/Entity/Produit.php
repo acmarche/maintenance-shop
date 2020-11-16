@@ -46,6 +46,11 @@ class Produit implements TimestampableInterface
     protected $description;
 
     /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $unite;
+
+    /**
      * @ORM\ManyToOne(targetEntity="AcMarche\MaintenanceShop\Entity\Categorie", inversedBy="produits")
      *
      * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
@@ -122,6 +127,18 @@ class Produit implements TimestampableInterface
     public function setCategorie(?Categorie $categorie): self
     {
         $this->categorie = $categorie;
+
+        return $this;
+    }
+
+    public function getUnite(): ?string
+    {
+        return $this->unite;
+    }
+
+    public function setUnite(?string $unite): self
+    {
+        $this->unite = $unite;
 
         return $this;
     }
