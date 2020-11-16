@@ -5,8 +5,11 @@ namespace AcMarche\MaintenanceShop\Controller;
 use AcMarche\MaintenanceShop\Entity\Commande;
 use AcMarche\MaintenanceShop\Entity\CommandeProduit;
 use AcMarche\MaintenanceShop\Entity\Produit;
+use AcMarche\MaintenanceShop\Form\CommandeSingleType;
 use AcMarche\MaintenanceShop\Form\CommandeType;
 use AcMarche\MaintenanceShop\Form\Search\SearchProduitType;
+use AcMarche\MaintenanceShop\Repository\CommandeProduitRepository;
+use AcMarche\MaintenanceShop\Repository\CommandeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,6 +20,23 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class CommandeController extends AbstractController
 {
+    /**
+     * @var CommandeRepository
+     */
+    private $commandeRepository;
+    /**
+     * @var CommandeProduitRepository
+     */
+    private $commandeProduitRepository;
+
+    public function __construct(
+        CommandeRepository $commandeRepository,
+        CommandeProduitRepository $commandeProduitRepository
+    ) {
+        $this->commandeRepository = $commandeRepository;
+        $this->commandeProduitRepository = $commandeProduitRepository;
+    }
+
     /**
      * @Route("/", name="acmaintenance_commande", methods={"GET"})
      */
@@ -48,7 +68,6 @@ class CommandeController extends AbstractController
         $search_form->handleRequest($request);
 
         if ($search_form->isSubmitted() && $search_form->isValid()) {
-
             if ($search_form->get('raz')->isClicked()) {
                 $session->remove($key);
                 $this->addFlash('info', 'La recherche a bien été réinitialisée.');
@@ -63,12 +82,14 @@ class CommandeController extends AbstractController
         }
 
         return $this->render(
-            '@AcMarcheMaintenanceShop/commande/index.html.twig',array(
-            'search' => $search,
-            'search_form' => $search_form->createView(),
-            'form' => $form->createView(),
-            'produits' => $produits,
-        ));
+            '@AcMarcheMaintenanceShop/commande/index.html.twig',
+            array(
+                'search' => $search,
+                'search_form' => $search_form->createView(),
+                'form' => $form->createView(),
+                'produits' => $produits,
+            )
+        );
     }
 
     /**
@@ -79,9 +100,39 @@ class CommandeController extends AbstractController
     public function show(Commande $commande)
     {
         return $this->render(
-            '@AcMarcheMaintenanceShop/commande/show.html.twig',array(
-            'commande' => $commande,
-        ));
+            '@AcMarcheMaintenanceShop/commande/show.html.twig',
+            array(
+                'commande' => $commande,
+            )
+        );
+    }
+
+    /**
+     * Finds and displays a Produit entity.
+     *
+     * @Route("/product/{id}", name="acmaintenance_commande_show_produit", methods={"GET","POST"})
+     */
+    public function showProduit(Request $request, Produit $produit)
+    {
+        $data = ['quantite' => 1];
+        $form = $this->createForm(CommandeSingleType::class, $data);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $quantite = $form->get('quantite')->getData();
+            $commandeProduit = $this->traitement($produit, $quantite);
+            $this->addFlash('success', $commandeProduit->getQuantite().' dans le panier');
+
+            return $this->redirectToRoute('acmaintenance_commande_show_produit', array('id' => $produit->getId()));
+        }
+
+        return $this->render(
+            '@AcMarcheMaintenanceShop/commande/show_produit.html.twig',
+            array(
+                'produit' => $produit,
+                'form' => $form->createView(),
+            )
+        );
     }
 
     /**
@@ -125,16 +176,30 @@ class CommandeController extends AbstractController
             );
         }
 
-        $commande = $em->getRepository(Commande::class)->getCommandeActive();
+        $commandeProduit = $this->traitement($produit, $quantite);
+
+        // return JsonResponse::create("cou");
+        return $this->render(
+            '@AcMarcheMaintenanceShop/commande/result.html.twig',
+            [
+                'class' => 'success',
+                'result' => $commandeProduit->getQuantite().' dans le panier',
+            ]
+        );
+    }
+
+    private function traitement(Produit $produit, int $quantite): CommandeProduit
+    {
+        $commande = $this->commandeRepository->getCommandeActive();
 
         if (!$commande) {
             $commande = new Commande();
-            $em->persist($commande);
-            $em->flush();
+            $this->commandeRepository->persist($commande);
+            $this->commandeRepository->flush();
         }
 
         $args = ['commande' => $commande, 'produit' => $produit];
-        $commandeProduit = $em->getRepository(CommandeProduit::class)->findOneBy($args);
+        $commandeProduit = $this->commandeProduitRepository->findOneBy($args);
         if ($commandeProduit) {
             $quantiteDansPanier = $commandeProduit->getQuantite();
             $commandeProduit->setQuantite($quantite + $quantiteDansPanier);
@@ -145,17 +210,10 @@ class CommandeController extends AbstractController
             $commandeProduit->setQuantite($quantite);
         }
 
-        $em->persist($commandeProduit);
-        $em->flush();
+        $this->commandeProduitRepository->persist($commandeProduit);
+        $this->commandeProduitRepository->flush();
 
-        // return JsonResponse::create("cou");
-        return $this->render(
-            '@AcMarcheMaintenanceShop/commande/result.html.twig',
-            [
-                'class' => 'success',
-                'result' => $commandeProduit->getQuantite().' dans le panier',
-            ]
-        );
+        return $commandeProduit;
     }
 
 

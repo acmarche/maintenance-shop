@@ -19,7 +19,7 @@
 
             {% for produit in produits %}
                 <tr>
-                    <td style="width: 70%;">
+                    <td style="width: 50%;">
                         <h5 class="text-success">{{ produit.nom }}
                             {% if produit.unite %}
                                 <strong>(<i>{{ produit.unite }}</i>)</strong>
@@ -39,6 +39,14 @@
                         </button>
                     </td>
                     <td>
+                        {% if produit.associatedProducts | length > 0 %}
+                            <h6><strong>Produits associés</strong></h6>
+                            {% for product in produit.associatedProducts %}
+                                <a href="{{ path('acmaintenance_commande_show_produit', { 'id': produit.id }) }}">
+                                    {{ product.nom }}
+                                </a>
+                            {% endfor %}
+                        {% endif %}
                         <div id="commande_result_{{ produit.id }}" class="form-group" style="margin-left: 20px;">
 
                         </div>

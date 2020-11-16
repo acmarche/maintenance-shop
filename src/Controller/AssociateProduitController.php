@@ -52,7 +52,7 @@ class AssociateProduitController extends AbstractController
                 $this->addFlash('success', 'Le produit a bien été associé.');
             }
 
-            return $this->redirectToRoute('acmaintenance_produit_show', array('id' => $produit->getId()));
+            return $this->redirectToRoute('acmaintenance_produit_associate', array('id' => $produit->getId()));
         }
 
         $produits = $this->produitRepository->findAll();

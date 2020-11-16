@@ -18,4 +18,14 @@ class CommandeProduitRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, CommandeProduit::class);
     }
+
+    public function persist(CommandeProduit $commandeProduit)
+    {
+        $this->_em->persist($commandeProduit);
+    }
+
+    public function flush()
+    {
+        $this->_em->flush();
+    }
 }

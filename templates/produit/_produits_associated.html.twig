@@ -1,0 +1,17 @@
+<h5 class="text-success mt-4">Produits associés</h5>
+<hr>
+<table class="table table-bordered">
+    {% for product in produit.associatedProducts %}
+        <tr>
+            <td>
+                <a href="{{ path('acmaintenance_produit_show', { 'id': produit.id }) }}">
+                    {{ product.nom }}
+                </a>
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td>Aucun</td>
+        </tr>
+    {% endfor %}
+</table>

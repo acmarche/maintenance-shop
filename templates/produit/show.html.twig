@@ -9,14 +9,15 @@
         <div class="card-body">
             {% include '@AcMarcheMaintenanceShop/produit/actions.html.twig' %}
             <br/>
-            <h4 class="text-success">Catégorie:
+            <p class="text-success">Catégorie:
                 <strong>{{ produit.categorie }}</strong>
-            </h4>
-            <h4 class="text-success">Unité:
+            </p>
+            <p class="text-success">Unité:
                 <strong>{{ produit.unite }}</strong>
-            </h4>
+            </p>
 
             <p class="card-text">{{ produit.description }}</p>
+            {% include '@AcMarcheMaintenanceShop/produit/_produits_associated.html.twig' %}
 
             {% include '@AcMarcheMaintenanceShop/produit/delete.html.twig' %}
 

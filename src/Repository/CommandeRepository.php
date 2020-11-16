@@ -45,4 +45,14 @@ class CommandeRepository extends ServiceEntityRepository
     {
         $this->_em->flush();
     }
+
+    public function persist(Commande $commande)
+    {
+        $this->_em->persist($commande);
+    }
+
+    public function flush()
+    {
+        $this->_em->flush();
+    }
 }
