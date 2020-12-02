@@ -1,0 +1,16 @@
+<h5 class="text-success">{{ produit.nom }}</h5>
+<span class="text-muted">{{ produit.description }}</span>
+{% if produit.unite %}
+    <br/> <strong>Unité: (<i>{{ produit.unite }}</i>)</strong>
+{% endif %}
+<br clear="all"/>
+<label class="my-1 mr-2" for="commande_quantite_{{ produit.id }}"
+       style="text-align: left; justify-content:left; ">Quantité</label>
+<input type="number" id="commande_quantite_{{ produit.id }}" name="quantite" min="1" max="999"
+       class="form-control mb-2 mr-sm-2 w-2566" required="required" value="1"
+       placeholder="Quantité">
+
+<button type="button" name="commande[submit]" data-produit="{{ produit.id }}"
+        class="btn-primary btn bouton-add">
+    <i class="fas fa-plus"></i> Ajouter
+</button>

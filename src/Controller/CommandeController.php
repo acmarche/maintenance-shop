@@ -10,6 +10,7 @@ use AcMarche\MaintenanceShop\Form\CommandeType;
 use AcMarche\MaintenanceShop\Form\Search\SearchProduitType;
 use AcMarche\MaintenanceShop\Repository\CommandeProduitRepository;
 use AcMarche\MaintenanceShop\Repository\CommandeRepository;
+use AcMarche\MaintenanceShop\Repository\ProduitRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -28,13 +29,19 @@ class CommandeController extends AbstractController
      * @var CommandeProduitRepository
      */
     private $commandeProduitRepository;
+    /**
+     * @var ProduitRepository
+     */
+    private $produitRepository;
 
     public function __construct(
+        ProduitRepository $produitRepository,
         CommandeRepository $commandeRepository,
         CommandeProduitRepository $commandeProduitRepository
     ) {
         $this->commandeRepository = $commandeRepository;
         $this->commandeProduitRepository = $commandeProduitRepository;
+        $this->produitRepository = $produitRepository;
     }
 
     /**
@@ -42,7 +49,6 @@ class CommandeController extends AbstractController
      */
     public function index(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
         $session = $request->getSession();
         $search = false;
         $data = array();
@@ -78,7 +84,7 @@ class CommandeController extends AbstractController
             $data = $search_form->getData();
             $session->set($key, serialize($data));
             $search = true;
-            $produits = $em->getRepository(Produit::class)->search($data);
+            $produits = $this->produitRepository->search($data);
         }
 
         return $this->render(

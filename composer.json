@@ -13,7 +13,7 @@
   ],
   "type": "symfony-bundle",
   "require": {
-    "php": "^7.2.5",
+    "php": "^7.3",
     "h4cc/wkhtmltopdf-amd64": "^0.12.4",
     "knplabs/doctrine-behaviors": "^2.0",
     "knplabs/knp-snappy-bundle": "^1.7",

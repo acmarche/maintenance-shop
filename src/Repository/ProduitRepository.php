@@ -31,7 +31,8 @@ class ProduitRepository extends ServiceEntityRepository
 
         $qb = $this->createQueryBuilder('produit');
         $qb->leftJoin('produit.categorie', 'categorie', 'WITH');
-        $qb->addSelect('categorie');
+        $qb->leftJoin('produit.associatedProducts', 'associatedProducts', 'WITH');
+        $qb->addSelect('categorie', 'associatedProducts');
 
         if ($nom) {
             $qb->andWhere('produit.nom LIKE :mot OR produit.description LIKE :mot ')
@@ -43,22 +44,51 @@ class ProduitRepository extends ServiceEntityRepository
                 ->setParameter('cat', $categorie);
         }
 
+        if (!$nom) {
+            $associated = $this->getAllAssociatedProducts();
+            $qb->andWhere('produit NOT IN (:associated)')
+                ->setParameter('associated', $associated);
+        }
+
         return $qb;
     }
 
-    public function search($args)
+    /**
+     * @param $args
+     * @return Produit[]
+     */
+    public function search($args): array
     {
         $qb = $this->setCriteria($args);
 
-        $qb->addOrderBy('produit.nom', 'ASC');
 
-        $query = $qb->getQuery();
+        return $qb
+            ->addOrderBy('produit.nom', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 
-        // echo  $query->getSQL();
+    /**
+     * @return Produit[]
+     */
+    public function getAllAssociatedProducts(): array
+    {
+        $data = $this->createQueryBuilder('produit')
+            ->leftJoin('produit.categorie', 'categorie', 'WITH')
+            ->leftJoin('produit.associatedProducts', 'associatedProducts', 'WITH')
+            ->addSelect('categorie', 'associatedProducts')
+            ->getQuery()->getResult();
 
-        $results = $query->getResult();
+        $products = [];
+        foreach ($data as $product) {
+            if (count($product->getAssociatedProducts()) > 0) {
+                $products = array_merge($products, $product->getAssociatedProducts()->toArray());
+            }
+        }
 
-        return $results;
+        // $products = array_merge(...$products);
+
+        return $products;
     }
 
     public function remove(Produit $produit)
