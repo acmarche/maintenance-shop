@@ -6,57 +6,46 @@ use AcMarche\MaintenanceShop\Entity\Commande;
 use AcMarche\MaintenanceShop\Entity\CommandeProduit;
 use AcMarche\MaintenanceShop\Form\PanierType;
 use AcMarche\MaintenanceShop\Service\Mailer;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/panier")
- */
+#[Route(path: '/panier')]
 class PanierController extends AbstractController
 {
-    /**
-     * @var Mailer
-     */
-    private $mailer;
-
-    public function __construct(Mailer $mailer)
+    public function __construct(private Mailer $mailer, private ManagerRegistry $managerRegistry)
     {
-        $this->mailer = $mailer;
     }
 
-    /**
-     * @Route("/", name="acmaintenance_panier", methods={"GET","POST"})
-     */
-    public function index(Request $request)
+    #[Route(path: '/', name: 'acmaintenance_panier', methods: ['GET', 'POST'])]
+    public function index(Request $request): RedirectResponse|Response
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->managerRegistry->getManager();
         $commande = $em->getRepository(Commande::class)->getCommandeActive();
         if (!$commande) {
             $commande = new Commande();
             $em->persist($commande);
             $em->flush();
         }
-
         $form = $this->createForm(PanierType::class, $commande);
-
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $produits = $commande->getProduits();
 
-            if (count($produits) == 0) {
+            if ((is_countable($produits) ? \count($produits) : 0) == 0) {
                 return $this->redirectToRoute('acmaintenance_panier');
             }
 
             try {
                 $this->mailer->sendPanier($commande);
-                $this->addFlash("success", "La commande a bien été envoyé");
+                $this->addFlash('success', 'La commande a bien été envoyé');
             } catch (TransportExceptionInterface $e) {
-                $this->addFlash("error", $e->getMessage());
+                $this->addFlash('error', $e->getMessage());
             }
 
             $commande->setEnvoye(true);
@@ -84,15 +73,12 @@ class PanierController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/update", name="acmaintenance_commande_update_quantite", methods={"POST"})
-     */
+    #[Route(path: '/update', name: 'acmaintenance_commande_update_quantite', methods: ['POST'])]
     public function updateQuantite(Request $request)
     {
         $id = $request->get('id');
         $quantite = $request->get('quantite');
-
-        if (!$id or !$quantite) {
+        if (!$id || !$quantite) {
             return $this->render(
                 '@AcMarcheMaintenanceShop/commande/result.html.twig',
                 [
@@ -101,7 +87,6 @@ class PanierController extends AbstractController
                 ]
             );
         }
-
         if ($quantite < 1) {
             return $this->render(
                 '@AcMarcheMaintenanceShop/commande/result.html.twig',
@@ -111,10 +96,8 @@ class PanierController extends AbstractController
                 ]
             );
         }
-
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->managerRegistry->getManager();
         $commandeProduit = $em->getRepository(CommandeProduit::class)->find($id);
-
         if (!$commandeProduit) {
             return $this->render(
                 '@AcMarcheMaintenanceShop/commande/result.html.twig',
@@ -124,11 +107,9 @@ class PanierController extends AbstractController
                 ]
             );
         }
-
         if ($quantite == $commandeProduit->getQuantite()) {
-            return Response::create('');
+            return (new Response())->create('');
         }
-
         $commandeProduit->setQuantite($quantite);
         $em->persist($commandeProduit);
         $em->flush();
@@ -142,14 +123,11 @@ class PanierController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/delete", name="acmaintenance_commande_delete", methods={"POST"})
-     */
+    #[Route(path: '/delete', name: 'acmaintenance_commande_delete', methods: ['POST'])]
     public function deleteProduit(Request $request)
     {
         $id = $request->get('id');
         $result = [];
-
         if (!$id) {
             $result['status'] = 'error';
             $txt = $this->renderView(
@@ -161,12 +139,10 @@ class PanierController extends AbstractController
             );
             $result['message'] = $txt;
 
-            return JsonResponse::create($result);
+            return (new JsonResponse())->create($result);
         }
-
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->managerRegistry->getManager();
         $commandeProduit = $em->getRepository(CommandeProduit::class)->find($id);
-
         if (!$commandeProduit) {
             $result['status'] = 'error';
 
@@ -178,13 +154,11 @@ class PanierController extends AbstractController
                 ]
             );
 
-            return JsonResponse::create($result);
+            return (new JsonResponse())->create($result);
         }
-
         $em->remove($commandeProduit);
         $em->flush();
         $result['status'] = 'success';
-
         $result['message'] = $this->renderView(
             '@AcMarcheMaintenanceShop/panier/_list_produits.html.twig',
             [
@@ -192,6 +166,6 @@ class PanierController extends AbstractController
             ]
         );
 
-        return JsonResponse::create($result);
+        return (new JsonResponse())->create($result);
     }
 }

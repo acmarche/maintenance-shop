@@ -14,24 +14,18 @@ class VidePanierCommand extends Command
      */
     protected static $defaultName = 'commande:vider-panier';
 
-    /**
-     * @var CommandeRepository
-     */
-    private $commandeRepository;
-
-    public function __construct(CommandeRepository $commandeRepository)
+    public function __construct(private CommandeRepository $commandeRepository)
     {
         parent::__construct();
-        $this->commandeRepository = $commandeRepository;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription('Vide le panier');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $commande = $this->commandeRepository->getCommandeActive();
         if ($commande) {
@@ -40,5 +34,4 @@ class VidePanierCommand extends Command
 
         return Command::SUCCESS;
     }
-
 }

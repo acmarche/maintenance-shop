@@ -1,5 +1,5 @@
 security:
-  encoders:
+  password_hashers:
     AcMarche\MaintenanceShop\Entity\User:
       algorithm: auto
 
@@ -10,10 +10,9 @@ security:
         property: username
   firewalls:
     main:
-      anonymous: lazy
+      lazy: true
       provider: sql_provider
-      guard:
-        authenticators:
-          - AcMarche\MaintenanceShop\Security\CommandeAuthenticator
+      custom_authenticators:
+        - AcMarche\MaintenanceShop\Security\CommandeAuthenticator
       logout:
         path: app_logout

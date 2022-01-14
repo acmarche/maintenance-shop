@@ -35,23 +35,23 @@ class CommandeRepository extends ServiceEntityRepository
         return $query->getOneOrNullResult();
     }
 
-    public function remove(Commande $commande)
+    public function remove(Commande $commande): void
     {
         $this->_em->remove($commande);
         $this->save();
     }
 
-    private function save()
+    private function save(): void
     {
         $this->_em->flush();
     }
 
-    public function persist(Commande $commande)
+    public function persist(Commande $commande): void
     {
         $this->_em->persist($commande);
     }
 
-    public function flush()
+    public function flush(): void
     {
         $this->_em->flush();
     }

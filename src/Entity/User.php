@@ -2,52 +2,33 @@
 
 namespace AcMarche\MaintenanceShop\Entity;
 
+use AcMarche\MaintenanceShop\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * @ORM\Entity(repositoryClass="AcMarche\MaintenanceShop\Repository\UserRepository")
- */
-class User implements UserInterface
+#[ORM\Entity(repositoryClass: UserRepository::class)]
+class User implements UserInterface, Stringable
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
-
-    /**
-     * @ORM\Column(type="string", length=180, unique=true)
-     */
+    #[ORM\Column(type: 'string', length: 180, unique: true)]
     private $username;
-
-    /**
-     * @ORM\Column(type="string", length=180, unique=true)
-     */
+    #[ORM\Column(type: 'string', length: 180, unique: true)]
     private $email;
-
-    /**
-     * @ORM\Column(type="string", length=180, nullable=false)
-     */
+    #[ORM\Column(type: 'string', length: 180, nullable: false)]
     private $nom;
-
-    /**
-     * @ORM\Column(type="string", length=180, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 180, nullable: true)]
     private $prenom;
-
-    /**
-     * @ORM\Column(type="json")
-     */
-    private $roles = [];
-
+    #[ORM\Column(type: 'json')]
+    private array $roles = [];
     /**
      * @var string The hashed password
-     * @ORM\Column(type="string")
      */
-    private $password;
-
+    #[ORM\Column(type: 'string')]
+    private string $password;
     /**
      * Plain password. Used for model validation. Must not be persisted.
      *
@@ -59,21 +40,26 @@ class User implements UserInterface
     {
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->getUsername();
+        return (string) $this->getUserIdentifier();
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->username;
     }
 
     public function addRole(string $role): void
     {
-        if (!in_array($role, $this->roles, true)) {
+        if (!\in_array($role, $this->roles, true)) {
             $this->roles[] = $role;
         }
     }
 
     public function removeRole(string $role): void
     {
-        if (in_array($role, $this->roles, true)) {
+        if (\in_array($role, $this->roles, true)) {
             $index = array_search($role, $this->roles);
             unset($this->roles[$index]);
         }
@@ -81,20 +67,14 @@ class User implements UserInterface
 
     public function hasRole(string $role): bool
     {
-        return in_array($role, $this->getRoles(), true);
+        return \in_array($role, $this->getRoles(), true);
     }
 
-    /**
-     * @return string|null
-     */
     public function getPlainPassword(): ?string
     {
         return $this->plainPassword;
     }
 
-    /**
-     * @param string|null $plainPassword
-     */
     public function setPlainPassword(?string $plainPassword): void
     {
         $this->plainPassword = $plainPassword;
@@ -112,7 +92,7 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getRoles(): ?array
+    public function getRoles(): array
     {
         return $this->roles;
     }
@@ -124,7 +104,7 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getPassword(): ?string
+    public function getPassword(): string
     {
         return $this->password;
     }
@@ -139,7 +119,7 @@ class User implements UserInterface
     /**
      * @see UserInterface
      */
-    public function getSalt()
+    public function getSalt(): void
     {
         // not needed when using the "bcrypt" algorithm in security.yaml
     }
@@ -147,7 +127,7 @@ class User implements UserInterface
     /**
      * @see UserInterface
      */
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;

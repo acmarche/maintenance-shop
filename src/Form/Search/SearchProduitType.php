@@ -12,21 +12,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SearchProduitType extends AbstractType
 {
-    /**
-     * @var CategorieRepository
-     */
-    private $categorieRepository;
-
-    public function __construct(CategorieRepository $categorieRepository)
+    public function __construct(private CategorieRepository $categorieRepository)
     {
-        $this->categorieRepository = $categorieRepository;
     }
 
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $categories = $this->categorieRepository->getForSearch();
 
@@ -34,41 +24,37 @@ class SearchProduitType extends AbstractType
             ->add(
                 'nom',
                 SearchType::class,
-                array(
+                [
                     'required' => false,
-                    'attr' => array(
+                    'attr' => [
                         'placeholder' => 'Mot clef',
-                    ),
-                )
+                    ],
+                ]
             )
             ->add(
                 'categorie',
                 ChoiceType::class,
-                array(
+                [
                     'choices' => $categories,
                     'required' => false,
                     'placeholder' => 'Choisissez une catégorie',
-                )
+                ]
             )
             ->add(
                 'raz',
                 SubmitType::class,
-                array(
+                [
                     'label' => 'Raz',
-                    'attr' => array(
+                    'attr' => [
                         'class' => 'btn-sm btn-default',
                         'title' => 'Réinitialiser la recherche',
-                    ),
-                )
+                    ],
+                ]
             );
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults(array());
+        $resolver->setDefaults([]);
     }
-
 }

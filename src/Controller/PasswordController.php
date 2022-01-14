@@ -6,79 +6,61 @@ use AcMarche\MaintenanceShop\Entity\User;
 use AcMarche\MaintenanceShop\Form\UtilisateurEditType;
 use AcMarche\MaintenanceShop\Form\UtilisateurPasswordType;
 use AcMarche\MaintenanceShop\Repository\UserRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-/**
- * @Route("/utilisateur/password")
- * @IsGranted("ROLE_MAINTENANCE_ADMIN")
- */
+#[Route(path: '/utilisateur/password')]
+#[IsGranted(data: 'ROLE_MAINTENANCE_ADMIN')]
 class PasswordController extends AbstractController
 {
-    private $userRepository;
-
-    /**
-     * @var UserPasswordEncoderInterface
-     */
-    private $passwordEncoder;
-
-    public function __construct(
-        UserRepository $userRepository,
-        UserPasswordEncoderInterface $passwordEncoder
-    ) {
-        $this->userRepository = $userRepository;
-        $this->passwordEncoder = $passwordEncoder;
+    public function __construct(private UserRepository $userRepository, private UserPasswordHasherInterface $passwordEncoder, private ManagerRegistry $managerRegistry)
+    {
     }
 
     /**
      * Displays a form to edit an existing Utilisateur utilisateur.
      *
-     * @Route("/{id}/password", name="commande_utilisateur_password", methods={"GET","POST"})
      * @todo
      */
-    public function passord(Request $request, User $utilisateur)
+    #[Route(path: '/{id}/password', name: 'commande_utilisateur_password', methods: ['GET', 'POST'])]
+    public function passord(Request $request, User $utilisateur): RedirectResponse|Response
     {
-        $em = $this->getDoctrine()->getManager();
-
+        $em = $this->managerRegistry->getManager();
         $editForm = $this->createForm(UtilisateurEditType::class, $utilisateur);
-
         $editForm->handleRequest($request);
-
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $em->flush();
-            $this->addFlash("success", "L'utilisateur a bien été modifié");
+            $this->addFlash('success', "L'utilisateur a bien été modifié");
 
             return $this->redirectToRoute('commande_utilisateur');
         }
 
         return $this->render(
             '@AcMarcheMaintenanceShop/utilisateur/password.html.twig',
-            array(
+            [
                 'utilisateur' => $utilisateur,
                 'edit_form' => $editForm->createView(),
-            )
+            ]
         );
     }
 
     /**
      * Displays a form to edit an existing categorie entity.
-     *
-     * @Route("/password/{id}", name="commande_utilisateur_password", methods={"GET","POST"})
-     *
      */
-    public function password(Request $request, User $user, UserPasswordEncoderInterface $userPasswordEncoder)
+    #[Route(path: '/password/{id}', name: 'commande_utilisateur_password', methods: ['GET', 'POST'])]
+    public function password(Request $request, User $user, UserPasswordHasherInterface $userPasswordEncoder): RedirectResponse|Response
     {
-        $em = $this->getDoctrine()->getManager();
-
+        $em = $this->managerRegistry->getManager();
         $form = $this->createForm(UtilisateurPasswordType::class, $user);
-
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
-            $password = $userPasswordEncoder->encodePassword($user, $form->getData()->getPlainPassword());
+            $password = $userPasswordEncoder->hashPassword($user, $form->getData()->getPlainPassword());
             $user->setPassword($password);
             $em->flush();
 
@@ -95,5 +77,4 @@ class PasswordController extends AbstractController
             ]
         );
     }
-
 }

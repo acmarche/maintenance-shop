@@ -2,69 +2,47 @@
 
 namespace AcMarche\MaintenanceShop\Entity;
 
+use AcMarche\MaintenanceShop\Repository\ProduitRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
+use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass="AcMarche\MaintenanceShop\Repository\ProduitRepository")
- * @ORM\Table(name="produit")
- *
- */
-class Produit implements TimestampableInterface
+#[ORM\Entity(repositoryClass: ProduitRepository::class)]
+#[ORM\Table(name: 'produit')]
+class Produit implements TimestampableInterface, Stringable
 {
     use TimestampableTrait;
-
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
-
     /**
      * @var string
-     * @ORM\Column(type="string", nullable=false)
-     * @ORM\OrderBy({"nom"="ASC"})
-     * @Assert\NotBlank()
      */
+    #[ORM\Column(type: 'string', nullable: false)]
+    #[ORM\OrderBy(value: ['nom' => 'ASC'])]
+    #[Assert\NotBlank]
     protected $nom;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
+    #[ORM\Column(type: 'integer', nullable: true)]
     protected $position;
-
-    /**
-     * @ORM\Column(type="boolean", nullable=false, options={"default"=0} )
-     */
+    #[ORM\Column(type: 'boolean', nullable: false, options: ['default' => 0])]
     protected $cacher = false;
-
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: 'text', nullable: true)]
     protected $description;
-
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
+    #[ORM\Column(type: 'string', nullable: true)]
     protected $unite;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="AcMarche\MaintenanceShop\Entity\Categorie", inversedBy="produits")
-     *
-     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
-     */
+    #[ORM\ManyToOne(targetEntity: Categorie::class, inversedBy: 'produits')]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     protected $categorie;
-
     /**
      * @var Produit[]
-     * @ORM\ManyToMany(targetEntity="AcMarche\MaintenanceShop\Entity\Produit")
-     * @ORM\JoinTable(name="produits_associated")
      */
+    #[ORM\ManyToMany(targetEntity: self::class)]
+    #[ORM\JoinTable(name: 'produits_associated')]
     protected $associatedProducts;
 
     public function __construct()
@@ -72,9 +50,9 @@ class Produit implements TimestampableInterface
         $this->associatedProducts = new ArrayCollection();
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-       return $this->nom;
+        return $this->nom;
     }
 
     public function getId(): ?int
@@ -82,7 +60,7 @@ class Produit implements TimestampableInterface
         return $this->id;
     }
 
-    public function getNom(): ?string
+    public function getNom(): string
     {
         return $this->nom;
     }
@@ -106,7 +84,7 @@ class Produit implements TimestampableInterface
         return $this;
     }
 
-    public function getCacher(): ?bool
+    public function getCacher(): bool
     {
         return $this->cacher;
     }
@@ -157,12 +135,12 @@ class Produit implements TimestampableInterface
     /**
      * @return Collection|Produit[]
      */
-    public function getAssociatedProducts(): Collection
+    public function getAssociatedProducts(): array
     {
         return $this->associatedProducts;
     }
 
-    public function addAssociatedProduct(Produit $associatedProduct): self
+    public function addAssociatedProduct(self $associatedProduct): self
     {
         if (!$this->associatedProducts->contains($associatedProduct)) {
             $this->associatedProducts[] = $associatedProduct;
@@ -171,12 +149,10 @@ class Produit implements TimestampableInterface
         return $this;
     }
 
-    public function removeAssociatedProduct(Produit $associatedProduct): self
+    public function removeAssociatedProduct(self $associatedProduct): self
     {
         $this->associatedProducts->removeElement($associatedProduct);
 
         return $this;
     }
-
-
 }

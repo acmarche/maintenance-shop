@@ -9,7 +9,7 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * @method Categorie|null find($id, $lockMode = null, $lockVersion = null)
  * @method Categorie|null findOneBy(array $criteria, array $orderBy = null)
- * method Categorie[]    findAll()
+ *                                                                                                      method Categorie[]    findAll()
  * @method Categorie[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class CategorieRepository extends ServiceEntityRepository
@@ -19,16 +19,17 @@ class CategorieRepository extends ServiceEntityRepository
         parent::__construct($registry, Categorie::class);
     }
 
-    public function findAll()
+    public function findAll(): array
     {
-        return $this->findBy(array(), array('nom' => 'ASC'));
+        return $this->findBy([], ['nom' => 'ASC']);
     }
 
     /**
-     * Pour formulaire avec liste deroulante
+     * Pour formulaire avec liste deroulante.
+     *
      * @return Categorie[]
      */
-    public function getForSearch()
+    public function getForSearch(): array
     {
         $qb = $this->createQueryBuilder('c');
 
@@ -36,7 +37,7 @@ class CategorieRepository extends ServiceEntityRepository
         $query = $qb->getQuery();
 
         $results = $query->getResult();
-        $categories = array();
+        $categories = [];
 
         foreach ($results as $categorie) {
             $categories[$categorie->getNom()] = $categorie->getId();
@@ -45,12 +46,12 @@ class CategorieRepository extends ServiceEntityRepository
         return $categories;
     }
 
-    public function remove(Categorie $categorie)
+    public function remove(Categorie $categorie): void
     {
         $this->_em->remove($categorie);
     }
 
-    public function flush()
+    public function flush(): void
     {
         $this->_em->flush();
     }

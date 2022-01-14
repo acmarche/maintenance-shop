@@ -2,39 +2,24 @@
 
 namespace AcMarche\MaintenanceShop\Entity;
 
+use AcMarche\MaintenanceShop\Repository\CommandeProduitRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass="AcMarche\MaintenanceShop\Repository\CommandeProduitRepository")
- * @ORM\Table(name="commande_produits")
- *
- */
+#[ORM\Entity(repositoryClass: CommandeProduitRepository::class)]
+#[ORM\Table(name: 'commande_produits')]
 class CommandeProduit
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="AcMarche\MaintenanceShop\Entity\Commande", inversedBy="produits")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Commande::class, inversedBy: 'produits')]
+    #[ORM\JoinColumn(nullable: false)]
     protected $commande;
-
-     /**
-     * @ORM\ManyToOne(targetEntity="AcMarche\MaintenanceShop\Entity\Produit")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Produit::class)]
+    #[ORM\JoinColumn(nullable: false)]
     protected $produit;
-
-    /**
-     *
-     * @ORM\Column(type="integer", nullable=false)
-     */
+    #[ORM\Column(type: 'integer', nullable: false)]
     protected $quantite;
 
     public function getId(): ?int
@@ -77,6 +62,4 @@ class CommandeProduit
 
         return $this;
     }
-
-
 }

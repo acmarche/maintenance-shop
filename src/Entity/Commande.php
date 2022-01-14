@@ -2,63 +2,39 @@
 
 namespace AcMarche\MaintenanceShop\Entity;
 
+use AcMarche\MaintenanceShop\Repository\CommandeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
-use Symfony\Component\Validator\Constraints as Assert;
+use Stringable;
 
-/**
- * @ORM\Entity(repositoryClass="AcMarche\MaintenanceShop\Repository\CommandeRepository")
- * @ORM\Table(name="commande")
- */
-class Commande implements TimestampableInterface
+#[ORM\Entity(repositoryClass: CommandeRepository::class)]
+#[ORM\Table(name: 'commande')]
+class Commande implements TimestampableInterface, Stringable
 {
     use TimestampableTrait;
-
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
-
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
+    #[ORM\Column(type: 'string', nullable: true)]
     protected $nom;
-
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
+    #[ORM\Column(type: 'string', nullable: true)]
     protected $prenom;
-
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
+    #[ORM\Column(type: 'string', nullable: true)]
     protected $lieu;
-
-    /**
-     * @ORM\Column(type="boolean", nullable=false, options={"default"=0} )
-     */
+    #[ORM\Column(type: 'boolean', nullable: false, options: ['default' => 0])]
     protected $envoye = false;
-
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: 'text', nullable: true)]
     protected $commentaire;
-
     /**
-     * Trace des produits commandes
-     * @ORM\Column(type="text", nullable=true)
+     * Trace des produits commandes.
      */
+    #[ORM\Column(type: 'text', nullable: true)]
     protected $archives_produits;
-
-    /**
-     * @ORM\OneToMany(targetEntity="AcMarche\MaintenanceShop\Entity\CommandeProduit", mappedBy="commande", cascade={"remove"})
-     *
-     */
+    #[ORM\OneToMany(targetEntity: CommandeProduit::class, mappedBy: 'commande', cascade: ['remove'])]
     protected $produits;
 
     public function __construct()
@@ -66,12 +42,12 @@ class Commande implements TimestampableInterface
         $this->produits = new ArrayCollection();
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return 'De '.$this->nom.' '.$this->prenom.' le '.$this->createdAt->format('d-m-Y H:i:s');
     }
 
-    public function getTotalQuantite()
+    public function getTotalQuantite(): int
     {
         $quantite = 0;
         foreach ($this->getProduits() as $commandeProduit) {
@@ -79,7 +55,6 @@ class Commande implements TimestampableInterface
         }
 
         return $quantite;
-
     }
 
     public function getId(): ?int
@@ -123,7 +98,7 @@ class Commande implements TimestampableInterface
         return $this;
     }
 
-    public function getEnvoye(): ?bool
+    public function getEnvoye(): bool
     {
         return $this->envoye;
     }
@@ -162,7 +137,7 @@ class Commande implements TimestampableInterface
     /**
      * @return Collection|CommandeProduit[]
      */
-    public function getProduits(): Collection
+    public function getProduits(): array|ArrayCollection
     {
         return $this->produits;
     }
@@ -179,15 +154,11 @@ class Commande implements TimestampableInterface
 
     public function removeProduit(CommandeProduit $produit): self
     {
-        if ($this->produits->removeElement($produit)) {
-            // set the owning side to null (unless already changed)
-            if ($produit->getCommande() === $this) {
-                $produit->setCommande(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->produits->removeElement($produit) && $produit->getCommande() === $this) {
+            $produit->setCommande(null);
         }
 
         return $this;
     }
-
-
 }

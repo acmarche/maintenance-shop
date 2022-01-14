@@ -4,12 +4,13 @@ namespace AcMarche\MaintenanceShop\Repository;
 
 use AcMarche\MaintenanceShop\Entity\Produit;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method Produit|null find($id, $lockMode = null, $lockVersion = null)
  * @method Produit|null findOneBy(array $criteria, array $orderBy = null)
- * method Produit[]    findAll()
+ *                                                                                                    method Produit[]    findAll()
  * @method Produit[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class ProduitRepository extends ServiceEntityRepository
@@ -19,15 +20,15 @@ class ProduitRepository extends ServiceEntityRepository
         parent::__construct($registry, Produit::class);
     }
 
-    public function findAll()
+    public function findAll(): array
     {
-        return $this->findBy(array(), array('nom' => 'ASC'));
+        return $this->findBy([], ['nom' => 'ASC']);
     }
 
-    public function setCriteria($args)
+    public function setCriteria($args): QueryBuilder
     {
-        $nom = isset($args['nom']) ? $args['nom'] : null;
-        $categorie = isset($args['categorie']) ? $args['categorie'] : 0;
+        $nom = $args['nom'] ?? null;
+        $categorie = $args['categorie'] ?? 0;
 
         $qb = $this->createQueryBuilder('produit');
         $qb->leftJoin('produit.categorie', 'categorie', 'WITH');
@@ -55,12 +56,12 @@ class ProduitRepository extends ServiceEntityRepository
 
     /**
      * @param $args
+     *
      * @return Produit[]
      */
     public function search($args): array
     {
         $qb = $this->setCriteria($args);
-
 
         return $qb
             ->addOrderBy('produit.nom', 'ASC')
@@ -81,7 +82,7 @@ class ProduitRepository extends ServiceEntityRepository
 
         $products = [];
         foreach ($data as $product) {
-            if (count($product->getAssociatedProducts()) > 0) {
+            if ((is_countable($product->getAssociatedProducts()) ? \count($product->getAssociatedProducts()) : 0) > 0) {
                 $products = array_merge($products, $product->getAssociatedProducts()->toArray());
             }
         }
@@ -91,12 +92,12 @@ class ProduitRepository extends ServiceEntityRepository
         return $products;
     }
 
-    public function remove(Produit $produit)
+    public function remove(Produit $produit): void
     {
         $this->_em->remove($produit);
     }
 
-    public function flush()
+    public function flush(): void
     {
         $this->_em->flush();
     }
