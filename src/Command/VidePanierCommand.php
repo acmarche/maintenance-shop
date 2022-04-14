@@ -9,9 +9,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class VidePanierCommand extends Command
 {
-    /**
-     * @var string
-     */
     protected static $defaultName = 'commande:vider-panier';
 
     public function __construct(private CommandeRepository $commandeRepository)
