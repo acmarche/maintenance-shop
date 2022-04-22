@@ -35,7 +35,7 @@ class ProduitController extends AbstractController
     {
         $em = $this->managerRegistry->getManager();
         $session = $request->getSession();
-        $search = false;
+
         $data = [];
         $key = 'maintenance_shop_search';
         if ($session->has($key)) {
@@ -52,23 +52,15 @@ class ProduitController extends AbstractController
         $produits = [];
         $search_form->handleRequest($request);
         if ($search_form->isSubmitted() && $search_form->isValid()) {
-            if ($search_form->get('raz')->isClicked()) {
-                $session->remove($key);
-                $this->addFlash('info', 'La recherche a bien été réinitialisée.');
-
-                return $this->redirectToRoute('acmaintenance_produit');
-            }
-
             $data = $search_form->getData();
             $session->set($key, serialize($data));
-            $search = true;
             $produits = $em->getRepository(Produit::class)->search($data);
         }
 
         return $this->render(
             '@AcMarcheMaintenanceShop/produit/index.html.twig',
             [
-                'search' => $search,
+                'search' => $search_form->isSubmitted(),
                 'search_form' => $search_form->createView(),
                 'produits' => $produits,
             ]
@@ -151,7 +143,7 @@ class ProduitController extends AbstractController
     /**
      * Deletes a Produit produit.
      */
-    #[Route(path: '/{id}', name: 'acmaintenance_produit_delete', methods: ['DELETE'])]
+    #[Route(path: '/{id}', name: 'acmaintenance_produit_delete', methods: ['POST'])]
     public function delete(Request $request, Produit $produit): RedirectResponse
     {
         $em = $this->managerRegistry->getManager();

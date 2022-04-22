@@ -16,14 +16,14 @@ class Categorie implements Stringable
     #[ORM\Id]
     #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    protected $id;
+    protected int $id;
     #[ORM\Column(type: 'string', nullable: false)]
     #[ORM\OrderBy(value: ['nom' => 'ASC'])]
     #[Assert\NotBlank]
-    protected $nom;
+    protected string $nom;
     #[ORM\OneToMany(targetEntity: Produit::class, mappedBy: 'categorie')]
     #[ORM\OrderBy(value: ['position' => 'ASC', 'nom' => 'ASC'])]
-    private $produits;
+    private Collection $produits;
 
     public function __construct()
     {
@@ -55,7 +55,7 @@ class Categorie implements Stringable
     /**
      * @return Collection|Produit[]
      */
-    public function getProduits(): ArrayCollection
+    public function getProduits(): Collection
     {
         return $this->produits;
     }

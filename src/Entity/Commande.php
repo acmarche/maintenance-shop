@@ -15,27 +15,28 @@ use Stringable;
 class Commande implements TimestampableInterface, Stringable
 {
     use TimestampableTrait;
+
     #[ORM\Id]
     #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    protected $id;
+    protected int $id;
     #[ORM\Column(type: 'string', nullable: true)]
-    protected $nom;
+    protected ?string $nom;
     #[ORM\Column(type: 'string', nullable: true)]
-    protected $prenom;
+    protected ?string $prenom;
     #[ORM\Column(type: 'string', nullable: true)]
-    protected $lieu;
+    protected ?string $lieu;
     #[ORM\Column(type: 'boolean', nullable: false, options: ['default' => 0])]
-    protected $envoye = false;
+    protected bool $envoye = false;
     #[ORM\Column(type: 'text', nullable: true)]
-    protected $commentaire;
+    protected ?string $commentaire;
     /**
      * Trace des produits commandes.
      */
     #[ORM\Column(type: 'text', nullable: true)]
-    protected $archives_produits;
+    protected ?string $archives_produits;
     #[ORM\OneToMany(targetEntity: CommandeProduit::class, mappedBy: 'commande', cascade: ['remove'])]
-    protected $produits;
+    protected Collection $produits;
 
     public function __construct()
     {
@@ -137,7 +138,7 @@ class Commande implements TimestampableInterface, Stringable
     /**
      * @return Collection|CommandeProduit[]
      */
-    public function getProduits(): array|ArrayCollection
+    public function getProduits(): array|Collection
     {
         return $this->produits;
     }

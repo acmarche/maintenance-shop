@@ -1,36 +1,41 @@
 {% extends '@AcMarcheMaintenanceShop/layout.html.twig' %}
 
 {% block body %}
-    <div class="page-header">
-        <h3>Votre panier</h3>
+
+    <div class="card">
+        <h3 class="card-header">Votre panier</h3>
+        <div class="card-body">
+
+
+            <div id="message"></div>
+
+            {% if commande.totalQuantite > 0 %}
+                <div id="result">
+                    {% include '@AcMarcheMaintenanceShop/panier/_list_produits.html.twig' %}
+                </div>
+
+                {{ form_start(form, { 'attr': {'class': 'well'} }) }}
+                {{ form_errors(form) }}
+                <div class="row">
+                    <div class="col-lg-6">
+                        {{ form_row(form.nom) }}
+                        {{ form_row(form.prenom) }}
+                        {{ form_row(form.lieu) }}
+                    </div>
+                    <div class="col-lg-6">
+                        {{ form_row(form.commentaire) }}
+                    </div>
+                </div>
+
+                <input type="submit" class="btn btn-primary mr-1" value="Envoyer la commande" name="submit">
+
+                {{ form_end(form) }}
+            {% else %}
+                <p class="text-warning">Votre panier est vide</p>
+            {% endif %}
+
+        </div>
     </div>
-
-    <div id="message"></div>
-
-    {% if commande.totalQuantite > 0 %}
-        <div id="result">
-            {% include '@AcMarcheMaintenanceShop/panier/_list_produits.html.twig' %}
-        </div>
-
-        {{ form_start(form, { 'attr': {'class': 'well'} }) }}
-        {{ form_errors(form) }}
-        <div class="row">
-            <div class="col-lg-6">
-                {{ form_row(form.nom) }}
-                {{ form_row(form.prenom) }}
-                {{ form_row(form.lieu) }}
-            </div>
-            <div class="col-lg-6">
-                {{ form_row(form.commentaire) }}
-            </div>
-        </div>
-
-        <input type="submit" class="btn btn-primary mr-1" value="Envoyer la commande" name="submit">
-
-        {{ form_end(form) }}
-    {% else %}
-        <p class="text-warning">Votre panier est vide</p>
-    {% endif %}
 
 {% endblock %}
 {% block scripts %}
@@ -60,8 +65,7 @@
                 function (data, status) {
                     if (data.status == 'error') {
                         $("#message").html(data.message);
-                    }
-                    else {
+                    } else {
                         $("#result").html(data.message);
                     }
                 });

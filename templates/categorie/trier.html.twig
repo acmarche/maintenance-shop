@@ -1,47 +1,40 @@
 {% extends '@AcMarcheMaintenanceShop/layout.html.twig' %}
 
 {% block body %}
-    <div class="page-header">
-        <h3>Trier les produits pour la catégorie {{ categorie }}</h3>
+
+    <div class="card">
+        <h3 class="card-header">Trier les produits pour la catégorie {{ categorie }}</h3>
+        <div class="card-body">
+            <br/>
+            <div class="alert alert-info">
+                Cliquez sur un produit et maintenez le clic tout en clissant la souris pour changer l'ordre
+            </div>
+            <div id="success">
+
+            </div>
+            {% if categorie.produits | length > 0 %}
+                <ul class="list-group" id="sortable">
+                    {% for produit in categorie.produits %}
+
+                        <li id="produits-{{ produit.id }}" class="list-group-item"><span
+                                    class="glyphicon glyphicon-sort"></span> {{ produit }}</li>
+
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-warning">Aucun produit</p>
+            {% endif %}
+
+            <br/>
+            <a href="{{ path('acmaintenance_categorie_show', { 'id': categorie.id }) }}" class="mt-2">
+                <span class="glyphicon glyphicon-list"></span> Retour à la catégorie
+            </a>
+        </div>
     </div>
-
-    <br/>
-
-    <div class="alert alert-info">
-        Cliquez sur un produit et maintenez le clic tout en clissant la souris pour changer l'ordre
-    </div>
-
-    <div id="success">
-
-    </div>
-
-    {% if categorie.produits | length > 0 %}
-        <ul class="list-group" id="sortable">
-            {% for produit in categorie.produits %}
-
-                <li id="produits-{{ produit.id }}" class="list-group-item"><span
-                            class="glyphicon glyphicon-sort"></span> {{ produit }}</li>
-
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p class="text-warning">Aucun produit</p>
-    {% endif %}
-
-    <br />
-    <a href="{{ path('acmaintenance_categorie_show', { 'id': categorie.id }) }}" class="mt-2">
-        <span class="glyphicon glyphicon-list"></span> Retour à la catégorie
-    </a>
-
-
-
 {% endblock %}
 
 {% block scripts %}
-    <script
-            src="https://code.jquery.com/ui/1.11.3/jquery-ui.min.js"
-            integrity="sha256-xI/qyl9vpwWFOXz7+x/9WkG5j/SVnSw21viy8fWwbeE="
-            crossorigin="anonymous"></script>
+
     <script type="text/javascript">
 
         $(document).ready(function () {

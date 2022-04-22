@@ -1,25 +1,21 @@
 {% if is_granted('ROLE_MAINTENANCE_ADMIN') %}
-    <!-- Modal -->
     <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel">Confirmation de la suppression</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Suppression d'un produit ?</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Êtes vous sur de supprimer {{ produit }}
+                    Etes vous sur de vouloir <strong>supprimer</strong> <strong>{{ produit | upper }} ? </strong>
                 </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler
+                    </button>
                     <form method="post" action="{{ path('acmaintenance_produit_delete', {'id': produit.id}) }}">
-                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="_method" value="POST">
                         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ produit.id) }}">
-                        <button type="button" class="btn btn-secondary"
-                                data-dismiss="modal">Annuler
-                        </button>
                         <button type="submit" class="btn btn-danger">Supprimer</button>
                     </form>
                 </div>

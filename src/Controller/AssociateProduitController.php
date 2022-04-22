@@ -57,7 +57,7 @@ class AssociateProduitController extends AbstractController
         );
     }
 
-    #[Route(path: '/', name: 'acmaintenance_produit_dissociate', methods: ['DELETE'])]
+    #[Route(path: '/', name: 'acmaintenance_produit_dissociate', methods: ['POST'])]
     public function delete(Request $request): RedirectResponse
     {
         $produitAssociatedId = $request->request->get('associateid');

@@ -1,13 +1,15 @@
 {% extends '@AcMarcheMaintenanceShop/layout.html.twig' %}
 
 {% block body -%}
-    <div class="page-header">
-        <h3>Catégorie <strong>{{ categorie }}</strong></h3>
+
+    <div class="card">
+        <h3 class="card-header">Catégorie <strong>{{ categorie }}</strong></h3>
+        <div class="card-body">
+            {% include '@AcMarcheMaintenanceShop/categorie/actions.html.twig' %}
+
+            {% include '@AcMarcheMaintenanceShop/categorie/produits.html.twig' %}
+
+        </div>
     </div>
-
-    {% include '@AcMarcheMaintenanceShop/categorie/actions.html.twig' %}
-
-     {% include '@AcMarcheMaintenanceShop/categorie/produits.html.twig' %}
-
     {% include '@AcMarcheMaintenanceShop/categorie/delete.html.twig' %}
 {% endblock %}

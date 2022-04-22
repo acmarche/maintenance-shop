@@ -12,15 +12,15 @@ class CommandeProduit
     #[ORM\Id]
     #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    protected $id;
+    protected int $id;
     #[ORM\ManyToOne(targetEntity: Commande::class, inversedBy: 'produits')]
     #[ORM\JoinColumn(nullable: false)]
-    protected $commande;
+    protected Commande $commande;
     #[ORM\ManyToOne(targetEntity: Produit::class)]
     #[ORM\JoinColumn(nullable: false)]
-    protected $produit;
+    protected Produit $produit;
     #[ORM\Column(type: 'integer', nullable: false)]
-    protected $quantite;
+    protected int $quantite;
 
     public function getId(): ?int
     {

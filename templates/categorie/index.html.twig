@@ -1,31 +1,38 @@
 {% extends '@AcMarcheMaintenanceShop/layout.html.twig' %}
 
 {% block body -%}
-    <div class="page-header">
-        <h3>Liste des catégories</h3>
+
+    <div class="card">
+        <h3 class="card-header">Liste des catégories</h3>
+        <div class="card-body">
+
+
+            <a href="{{ path('acmaintenance_categorie_new') }}" class="btn btn-primary" role="button"><i
+                        class="fas fa-plus"></i> Ajouter</a>
+
+            <br/> <br/>
+
+            {% if categories | length > 0 %}
+                <table class='table table-bordered table-hover'>
+                    <thead>
+                    <tr>
+                        <th>Intitule</th>
+                        <th>Nbre de produits</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for categorie in categories %}
+                        <tr>
+                            <td>
+                                <a href="{{ path('acmaintenance_categorie_show', { 'id': categorie.id }) }}">{{ categorie }}</a>
+                            </td>
+                            <td>{{ categorie.produits | length }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+
+        </div>
     </div>
-
-    <a href="{{ path('acmaintenance_categorie_new') }}" class="btn btn-primary" role="button"><i
-                class="fas fa-plus"></i> Ajouter</a>
-
-    <br/>   <br/>
-
-    {% if categories | length > 0 %}
-        <table class='table table-bordered table-hover'>
-            <thead>
-            <tr>
-                <th>Intitule</th>
-                <th>Nbre de produits</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for categorie in categories %}
-                <tr>
-                    <td><a href="{{ path('acmaintenance_categorie_show', { 'id': categorie.id }) }}">{{ categorie }}</a></td>
-                    <td>{{ categorie.produits | length }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    {% endif %}
 {% endblock %}

@@ -22,8 +22,10 @@ use Symfony\Component\Routing\Annotation\Route;
 #[IsGranted(data: 'ROLE_MAINTENANCE_ADMIN')]
 class CategorieController extends AbstractController
 {
-    public function __construct(private CategorieRepository $categorieRepository, private ManagerRegistry $managerRegistry)
-    {
+    public function __construct(
+        private CategorieRepository $categorieRepository,
+        private ManagerRegistry $managerRegistry
+    ) {
     }
 
     /**
@@ -116,7 +118,7 @@ class CategorieController extends AbstractController
     /**
      * Deletes a Categorie categorie.
      */
-    #[Route(path: '/{id}', name: 'acmaintenance_categorie_delete', methods: ['DELETE'])]
+    #[Route(path: '/{id}', name: 'acmaintenance_categorie_delete', methods: ['POST'])]
     public function delete(Request $request, Categorie $categorie): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$categorie->getId(), $request->request->get('_token'))) {

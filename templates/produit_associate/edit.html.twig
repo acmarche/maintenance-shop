@@ -2,16 +2,13 @@
 
 {% block body -%}
 
-    <div class="card mb-3">
-        <div class="card-header">
-            <h3>Associés des produits à
-                <a href="{{ path('acmaintenance_produit_show', { 'id': produit.id }) }}">
-                    {{ produit }}
-                </a>
-            </h3>
-        </div>
+    <div class="card">
+        <h3 class="card-header">Associés des produits à
+            <a href="{{ path('acmaintenance_produit_show', { 'id': produit.id }) }}">
+                {{ produit }}
+            </a>
+        </h3>
         <div class="card-body">
-
             <div class="alert alert-info">
                 Rechercher plus rapidement en écrivant le nom
             </div>

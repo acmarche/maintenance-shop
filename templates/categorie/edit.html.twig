@@ -1,11 +1,11 @@
 {% extends '@AcMarcheMaintenanceShop/layout.html.twig' %}
 
 {% block body -%}
-    <div class="page-header">
-        <h3>Edition de {{ categorie }}</h3>
+    <div class="card">
+        <h3 class="card-header">Edition de {{ categorie }}</h3>
+        <div class="card-body">
+            {{ form(edit_form) }}
+        </div>
     </div>
-
-    {{ form(edit_form) }}
-
 {% endblock %}
 

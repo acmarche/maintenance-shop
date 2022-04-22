@@ -1,50 +1,56 @@
 {% extends '@AcMarcheMaintenanceShop/layout.html.twig' %}
 
 {% block body %}
-    <div class="page-header">
-        <h3>Rechercher des produits</h3>
-    </div>
 
-    {% include '@AcMarcheMaintenanceShop/search/produit.html.twig' with {'form': search_form } %}
+    <div class="card">
+        <h3 class="card-header">Rechercher des produits</h3>
+        <div class="card-body">
 
-    <br/>
-    {% if search and produits | length == 0 %}
-        <p class="text-warning">Aucun produit trouvé</p>
-    {% endif %}
+            {% include '@AcMarcheMaintenanceShop/search/produit.html.twig' with {'form': search_form } %}
 
-    {% if produits | length > 0 %}
-        {{ form_start(form, { 'attr': {'class': 'form-inline'}}) }}
-        {{ form_errors(form) }}
-        <table class="table table-bordered">
+            <br/>
+            {% if search and produits | length == 0 %}
+                <p class="text-warning">Aucun produit trouvé</p>
+            {% endif %}
 
-            {% for produit in produits %}
-                <tr>
-                    <td style="width: 80%;">
-                        {% include '@AcMarcheMaintenanceShop/commande/_produit_line.html.twig' %}
-                    </td>
-                    <td>
-                        {% include '@AcMarcheMaintenanceShop/commande/_result_add_panier.html.twig' %}
-                    </td>
-                </tr>
-                {% if produit.associatedProducts | length > 0 %}
-                    {% for product in produit.associatedProducts %}
+            {% if produits | length > 0 %}
+                {{ form_start(form, { 'attr': {'class': 'form-inline'}}) }}
+                {{ form_errors(form) }}
+                <table class="table table-bordered">
+
+                    {% for produit in produits %}
                         <tr>
-                            <td>
-                                <div class="ml-4">
-                                <h6><strong>Pensez aussi à:</strong></h6>
-                                {% set produit = product %}
+                            <td style="width: 80%;">
                                 {% include '@AcMarcheMaintenanceShop/commande/_produit_line.html.twig' %}
-                                </div>  </td>
+                            </td>
                             <td>
                                 {% include '@AcMarcheMaintenanceShop/commande/_result_add_panier.html.twig' %}
                             </td>
                         </tr>
+                        {% if produit.associatedProducts | length > 0 %}
+                            {% for product in produit.associatedProducts %}
+                                <tr>
+                                    <td>
+                                        <div class="ml-4">
+                                            <h6><strong>Pensez aussi à:</strong></h6>
+                                            {% set produit = product %}
+                                            {% include '@AcMarcheMaintenanceShop/commande/_produit_line.html.twig' %}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {% include '@AcMarcheMaintenanceShop/commande/_result_add_panier.html.twig' %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
                     {% endfor %}
-                {% endif %}
-            {% endfor %}
-        </table>
-        {{ form_end(form) }}
-    {% endif %}
+                </table>
+                {{ form_end(form) }}
+            {% endif %}
+
+
+        </div>
+    </div>
 
 {% endblock %}
 {% block scripts %}

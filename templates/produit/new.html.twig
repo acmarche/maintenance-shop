@@ -1,10 +1,10 @@
 {% extends '@AcMarcheMaintenanceShop/layout.html.twig' %}
 
 {% block body -%}
-    <div class="page-header">
-        <h3>Nouveau produit</h3>
+    <div class="card">
+        <h3 class="card-header">Nouveau produit</h3>
+        <div class="card-body">
+            {% include '@AcMarcheMaintenanceShop/produit/_form.html.twig' %}
+        </div>
     </div>
-
-    {% include '@AcMarcheMaintenanceShop/produit/_form.html.twig' %}
-
 {% endblock %}

@@ -9,7 +9,7 @@
         <h3>Archive commande {{ commande.id }}</h3>
     </div>
 
-    <h4 class="text-success">Commande crée le {{ commande.createdAt | date('d-m-Y H:i') }}</h4>
+    <h4 class="text-success">Commande crée le {{ commande.createdAt | format_date('full') }}</h4>
 
     <strong>Pour {{ commande.nom }} {{ commande.prenom }} à {{ commande.lieu }}</strong>
     <br /><br />

@@ -5,23 +5,24 @@ namespace AcMarche\MaintenanceShop\Entity;
 use AcMarche\MaintenanceShop\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User implements UserInterface, Stringable
+class User implements UserInterface, PasswordAuthenticatedUserInterface, Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
     #[ORM\Column(type: 'string', length: 180, unique: true)]
-    private $username;
+    private ?string $username;
     #[ORM\Column(type: 'string', length: 180, unique: true)]
-    private $email;
+    private ?string $email;
     #[ORM\Column(type: 'string', length: 180, nullable: false)]
-    private $nom;
+    private ?string $nom;
     #[ORM\Column(type: 'string', length: 180, nullable: true)]
-    private $prenom;
+    private ?string $prenom;
     #[ORM\Column(type: 'json')]
     private array $roles = [];
     /**
@@ -31,10 +32,8 @@ class User implements UserInterface, Stringable
     private string $password;
     /**
      * Plain password. Used for model validation. Must not be persisted.
-     *
-     * @var string|null
      */
-    protected $plainPassword;
+    protected ?string $plainPassword;
 
     public function __construct()
     {
@@ -42,7 +41,7 @@ class User implements UserInterface, Stringable
 
     public function __toString(): string
     {
-        return (string) $this->getUserIdentifier();
+        return (string)$this->getUserIdentifier();
     }
 
     public function getUserIdentifier(): string

@@ -4,6 +4,7 @@ namespace AcMarche\MaintenanceShop\Repository;
 
 use AcMarche\MaintenanceShop\Entity\Categorie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -44,6 +45,12 @@ class CategorieRepository extends ServiceEntityRepository
         }
 
         return $categories;
+    }
+
+    public function getQbl(): QueryBuilder
+    {
+        return $this->createQueryBuilder('produit')
+            ->addOrderBy('produit.nom', 'ASC');
     }
 
     public function remove(Categorie $categorie): void

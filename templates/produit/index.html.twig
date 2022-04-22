@@ -1,39 +1,56 @@
 {% extends '@AcMarcheMaintenanceShop/layout.html.twig' %}
 
 {% block body -%}
-    <div class="page-header">
-        <h3>Gestion des produits</h3>
+
+    <div class="card">
+        <h3 class="card-header">Gestion des produits</h3>
+        <div class="card-body">
+            {% if is_granted('ROLE_MAINTENANCE_ADMIN') %}
+                <a class="btn btn-primary m-2" role="button"
+                   href="{{ path('acmaintenance_produit_new') }}"><i class="fas fa-plus"></i> Ajouter un produit</a>
+
+            {% endif %}
+
+            {% include '@AcMarcheMaintenanceShop/search/produit.html.twig' with {'form': search_form } %}
+
+            <br/>
+            {% if search and produits | length == 0 %}
+                <p class="text-warning">Aucun produit trouvé</p>
+            {% endif %}
+
+            {% if produits | length > 0 %}
+                <table class='table table-bordered table-hover'>
+                    <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Nom</th>
+                        <th>Catégorie</th>
+                        <th>Unité</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for produit in produits %}
+                        <tr>
+                            <td>
+                                {% if produit.imageName %}
+                                    <img src="{{ vich_uploader_asset(produit, 'imageFile')| imagine_filter('produit_thumb') }}"
+                                         alt="{{ produit.nom }}"/>
+                                {% else %}
+
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{{ path('acmaintenance_produit_show', { 'id': produit.id }) }}">
+                                    {{ produit }}
+                                </a>
+                            </td>
+                            <td>{{ produit.categorie }}</td>
+                            <td>{{ produit.unite }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
     </div>
-
-    {% include '@AcMarcheMaintenanceShop/search/produit.html.twig' with {'form': search_form } %}
-
-    <br/>
-    {% if search and produits | length == 0 %}
-        <p class="text-warning">Aucun produit trouvé</p>
-    {% endif %}
-
-    {% if produits | length > 0 %}
-        <table class='table table-bordered table-hover'>
-            <thead>
-            <tr>
-                <th>Nom</th>
-                <th>Catégorie</th>
-                <th>Unité</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for produit in produits %}
-                <tr>
-                    <td>
-                        <a href="{{ path('acmaintenance_produit_show', { 'id': produit.id }) }}">
-                            {{ produit }}
-                        </a>
-                    </td>
-                    <td>{{ produit.categorie }}</td>
-                    <td>{{ produit.unite }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    {% endif %}
 {% endblock %}

@@ -1,13 +1,13 @@
-<h3>Liste des produits</h3>
+<h4 class="text-success">Liste des produits</h4>
 
 {% if categorie.produits | length > 0 %}
     <ul class="list-group">
         {% for categorie in categorie.produits %}
 
-            <li class="list-group-item"><a href="{{ path('acmaintenance_produit_show', { 'id': categorie.id }) }}">{{ categorie }}</a></li>
+            <li class="list-group-item"><a
+                        href="{{ path('acmaintenance_produit_show', { 'id': categorie.id }) }}">{{ categorie }}</a></li>
 
         {% endfor %}
     </ul>
 
 {% endif %}
-

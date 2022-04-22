@@ -2,13 +2,13 @@
 
 {% block body -%}
 
-    <div class="card mb-3">
-        <div class="card-header">
-            <h3>{{ produit }}</h3>
-        </div>
+    <div class="card">
+        <h3 class="card-header">{{ produit }}</h3>
+
         <div class="card-body">
             {% include '@AcMarcheMaintenanceShop/produit/actions.html.twig' %}
             <br/>
+
             <p class="text-success">Catégorie:
                 <strong>{{ produit.categorie }}</strong>
             </p>
@@ -16,16 +16,17 @@
                 <strong>{{ produit.unite }}</strong>
             </p>
 
+            {% if produit.imageName %}
+                <img src="{{ vich_uploader_asset(produit, 'imageFile')| imagine_filter('produit_thumb') }}"
+                     alt="{{ produit.nom }}"/>
+            {% endif %}
+
             <p class="card-text">{{ produit.description }}</p>
             {% include '@AcMarcheMaintenanceShop/produit/_produits_associated.html.twig' %}
 
             {% include '@AcMarcheMaintenanceShop/produit/delete.html.twig' %}
 
         </div>
-        <div class="card-footer">
-
-        </div>
     </div>
-
 
 {% endblock %}

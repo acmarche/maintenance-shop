@@ -6,7 +6,6 @@ use AcMarche\MaintenanceShop\Repository\CategorieRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SearchType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -38,17 +37,6 @@ class SearchProduitType extends AbstractType
                     'choices' => $categories,
                     'required' => false,
                     'placeholder' => 'Choisissez une catégorie',
-                ]
-            )
-            ->add(
-                'raz',
-                SubmitType::class,
-                [
-                    'label' => 'Raz',
-                    'attr' => [
-                        'class' => 'btn-sm btn-default',
-                        'title' => 'Réinitialiser la recherche',
-                    ],
                 ]
             );
     }
