@@ -6,10 +6,12 @@ use AcMarche\MaintenanceShop\Entity\Categorie;
 use AcMarche\MaintenanceShop\Entity\Produit;
 use AcMarche\MaintenanceShop\Form\CategorieType;
 use AcMarche\MaintenanceShop\Repository\CategorieRepository;
+use AcMarche\MaintenanceShop\Repository\ProduitRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,6 +26,7 @@ class CategorieController extends AbstractController
 {
     public function __construct(
         private CategorieRepository $categorieRepository,
+        private ProduitRepository $produitRepository,
         private ManagerRegistry $managerRegistry
     ) {
     }
@@ -160,5 +163,24 @@ class CategorieController extends AbstractController
             '@AcMarcheMaintenanceShop/categorie/trier.html.twig',
             ['categorie' => $categorie]
         );
+    }
+
+    #[Route(path: '/q/sort/', name: 'acmaintenance_categorie_ajax_sort', methods: ['POST'])]
+    public function trierProduit(Request $request): JsonResponse
+    {
+        //    $isAjax = $request->isXmlHttpRequest();
+        //    if ($isAjax) {
+        //
+        $data = json_decode($request->getContent(), null, 512, JSON_THROW_ON_ERROR);
+        $produits = $data->produits;
+        foreach ($produits as $position => $produitId) {
+            $produit = $this->produitRepository->find($produitId);
+            if (null !== $produit) {
+                $produit->setPosition($position);
+            }
+        }
+        $this->produitRepository->flush();
+
+        return $this->json('<div class="alert alert-success">Tri enregistré</div>');
     }
 }
