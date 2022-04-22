@@ -1,27 +1,23 @@
 {% if is_granted('ROLE_MAINTENANCE_ADMIN') %}
-    <!-- Modal -->
-    <div class="modal fade" id="dissociateModal" tabindex="-1" role="dialog" aria-labelledby="dissociateModal"
+    <div class="modal fade" id="dissociateModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel">Confirmation de dissociation</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Confirmation de dissociation</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     Êtes vous sur de dissocier
                 </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler
+                    </button>
                     <form method="post" action="{{ path('acmaintenance_produit_dissociate') }}">
                         <input type="hidden" name="_method" value="DELETE">
                         <input type="hidden" name="associateid" id="associateId">
                         <input type="hidden" name="produitid" id="produitId">
                         <input type="hidden" name="_token" id="relationtoken">
-                        <button type="button" class="btn btn-secondary"
-                                data-dismiss="modal">Annuler
-                        </button>
                         <button type="submit" class="btn btn-danger">Dissocier</button>
                     </form>
                 </div>

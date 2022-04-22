@@ -41,13 +41,15 @@
 
 {% block javascripts %}
     <script type="text/javascript">
-        $(".unlinkproduct").click(function () {
-            var associateId = $(this).attr("data-associateid");
-            var produitId = $(this).attr("data-produitid");
-            var relationToken = $(this).attr("data-token");
-            $("#associateId").val(associateId);
-            $("#produitId").val(produitId);
-            $("#relationtoken").val(relationToken);
-        });
+        document.querySelector('.unlinkproduct').addEventListener('click', function (event) {
+                let button = event.target;
+                let associateId = button.dataset.associateid;
+                let produitId = button.dataset.produitid;
+                let relationToken = button.dataset.token;
+                document.querySelector("#associateId").value = associateId;
+                document.querySelector("#produitId").value = produitId;
+                document.querySelector("#relationtoken").value = relationToken;
+            }
+        );
     </script>
 {% endblock %}
