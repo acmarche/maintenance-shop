@@ -1,0 +1,16 @@
+{% if produit.associatedProducts | length > 0 %}
+    {% for product in produit.associatedProducts %}
+        <tr>
+            <td>
+                <div class="ml-4">
+                    <h6><strong>Pensez aussi à:</strong></h6>
+                    {% set produit = product %}
+                    {% include '@AcMarcheMaintenanceShop/commande/_produit_line.html.twig' %}
+                </div>
+            </td>
+            <td>
+                {% include '@AcMarcheMaintenanceShop/commande/_result_add_panier.html.twig' %}
+            </td>
+        </tr>
+    {% endfor %}
+{% endif %}

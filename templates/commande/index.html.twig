@@ -8,7 +8,6 @@
 
             {% include '@AcMarcheMaintenanceShop/search/produit.html.twig' with {'form': search_form } %}
 
-            <br/>
             {% if search and produits | length == 0 %}
                 <p class="text-warning">Aucun produit trouvé</p>
             {% endif %}
@@ -16,57 +15,54 @@
             {% if produits | length > 0 %}
                 {{ form_start(form, { 'attr': {'class': 'form-inline'}}) }}
                 {{ form_errors(form) }}
-                <table class="table table-bordered">
-
+                <div class="row">
                     {% for produit in produits %}
-                        <tr>
-                            <td style="width: 80%;">
-                                {% include '@AcMarcheMaintenanceShop/commande/_produit_line.html.twig' %}
-                            </td>
-                            <td>
-                                {% include '@AcMarcheMaintenanceShop/commande/_result_add_panier.html.twig' %}
-                            </td>
-                        </tr>
-                        {% if produit.associatedProducts | length > 0 %}
-                            {% for product in produit.associatedProducts %}
-                                <tr>
-                                    <td>
-                                        <div class="ml-4">
-                                            <h6><strong>Pensez aussi à:</strong></h6>
-                                            {% set produit = product %}
-                                            {% include '@AcMarcheMaintenanceShop/commande/_produit_line.html.twig' %}
-                                        </div>
-                                    </td>
-                                    <td>
-                                        {% include '@AcMarcheMaintenanceShop/commande/_result_add_panier.html.twig' %}
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        {% endif %}
+
+                        <div class="col-6">
+                            {% include '@AcMarcheMaintenanceShop/commande/_produit_line.html.twig' %}
+                            {% include '@AcMarcheMaintenanceShop/commande/_result_add_panier.html.twig' %}
+                        </div>
+
+                        {# % include '@AcMarcheMaintenanceShop/commande/_produits_associated.html.twig' % #}
                     {% endfor %}
-                </table>
+                </div>
                 {{ form_end(form) }}
             {% endif %}
-
 
         </div>
     </div>
 
 {% endblock %}
 {% block scripts %}
-    <script>
-        $(".bouton-add").click(function () {
-            var produitId = jQuery(this).attr("data-produit");
-            var quantite = $("#commande_quantite_" + produitId).val();
+    <script type="text/javascript">
+        let elements = document.querySelectorAll('.boutonadd');
 
-            $.post("{{ path('acmaintenance_commande_add') }}",
-                {
+        Array.prototype.forEach.call(elements, function (element, i) {
+            element.addEventListener('click', () => {
+                let produitId = element.dataset.produit;
+                let quantite = document.querySelector("#commande_quantite_" + produitId).value;
+                let data = {
                     produit: produitId,
                     quantite: quantite
-                },
-                function (data, status) {
-                    $("#commande_result_" + produitId).html(data);
+                };
+
+                fetch("{{ path('acmaintenance_commande_add') }}", {
+                    method: "POST",
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
+                }).then(function (response) {
+                    return response.text()
+                    if (response.ok) {
+                        console.log(document.querySelector("#result"));
+                    }
+                    return Promise.reject(response);
+                }).then(function (data) {
+                    document.querySelector("#result-"+produitId).innerHTML = data;
+                    console.log(data);
+                }).catch(function (error) {
+                    console.warn('Something went wrong.', error);
                 });
-        });
+            })
+        }); // document.querySelector("#commande_result_" + produitId).html = data;
     </script>
 {% endblock %}

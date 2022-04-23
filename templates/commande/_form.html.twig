@@ -1,0 +1,13 @@
+{% if produit.unite %}
+    <strong>Unité: (<i>{{ produit.unite }}</i>)</strong>
+{% endif %}
+
+<label class="my-1 mr-2" for="commande_quantite_{{ produit.id }}"
+       style="text-align: left; justify-content:left; ">Quantité</label>
+
+<input type="number" id="commande_quantite_{{ produit.id }}" name="quantite" min="1" max="999"
+       class="form-control mb-2 mr-sm-2 w-2566" required="required" value="1"
+       placeholder="Quantité">
+<div id="result-{{ produit.id }}">
+
+</div>

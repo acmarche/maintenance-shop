@@ -13,6 +13,7 @@ use AcMarche\MaintenanceShop\Repository\CommandeRepository;
 use AcMarche\MaintenanceShop\Repository\ProduitRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,8 +25,12 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route(path: '/commande')]
 class CommandeController extends AbstractController
 {
-    public function __construct(private ProduitRepository $produitRepository, private CommandeRepository $commandeRepository, private CommandeProduitRepository $commandeProduitRepository, private ManagerRegistry $managerRegistry)
-    {
+    public function __construct(
+        private ProduitRepository $produitRepository,
+        private CommandeRepository $commandeRepository,
+        private CommandeProduitRepository $commandeProduitRepository,
+        private ManagerRegistry $managerRegistry
+    ) {
     }
 
     #[Route(path: '/', name: 'acmaintenance_commande', methods: ['GET'])]
@@ -51,12 +56,6 @@ class CommandeController extends AbstractController
         $produits = [];
         $search_form->handleRequest($request);
         if ($search_form->isSubmitted() && $search_form->isValid()) {
-            if ($search_form->get('raz')->isClicked()) {
-                $session->remove($key);
-                $this->addFlash('info', 'La recherche a bien été réinitialisée.');
-
-                return $this->redirectToRoute('acmaintenance_commande');
-            }
 
             $data = $search_form->getData();
             $session->set($key, serialize($data));
@@ -118,17 +117,25 @@ class CommandeController extends AbstractController
     #[Route(path: '/add', name: 'acmaintenance_commande_add', methods: ['POST'])]
     public function addProduit(Request $request): Response
     {
-        $produitId = $request->get('produit');
-        $quantite = $request->get('quantite');
+        $produitId = $quantite = $error = null;
+        try {
+            $data = json_decode($request->getContent());
+            $produitId = $data->produit;
+            $quantite = $data->quantite;
+        } catch (\Exception$exception) {
+            $error = $exception->getMessage();
+        }
+
         if (!$produitId || !$quantite) {
             return $this->render(
                 '@AcMarcheMaintenanceShop/commande/result.html.twig',
                 [
                     'class' => 'danger',
-                    'result' => 'Référence produit ou quantité non trouvé',
+                    'result' => 'Référence produit ou quantité non trouvé: '.$error,
                 ]
             );
         }
+
         if ($quantite < 1) {
             return $this->render(
                 '@AcMarcheMaintenanceShop/commande/result.html.twig',
@@ -138,8 +145,8 @@ class CommandeController extends AbstractController
                 ]
             );
         }
-        $em = $this->managerRegistry->getManager();
-        $produit = $em->getRepository(Produit::class)->find($produitId);
+
+        $produit = $this->produitRepository->find($produitId);
         if (!$produit) {
             return $this->render(
                 '@AcMarcheMaintenanceShop/commande/result.html.twig',
@@ -150,7 +157,7 @@ class CommandeController extends AbstractController
             );
         }
         $commandeProduit = $this->traitement($produit, $quantite);
-        // return JsonResponse::create("cou");
+
         return $this->render(
             '@AcMarcheMaintenanceShop/commande/result.html.twig',
             [

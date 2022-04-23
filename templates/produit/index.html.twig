@@ -42,6 +42,9 @@
                             <td>
                                 <a href="{{ path('acmaintenance_produit_show', { 'id': produit.id }) }}">
                                     {{ produit }}
+                                    {% if produit.description %}
+                                        <span class="text-muted">{{ produit.description }}</span>
+                                    {% endif %}
                                 </a>
                             </td>
                             <td>{{ produit.categorie }}</td>
