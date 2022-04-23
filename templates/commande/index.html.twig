@@ -15,20 +15,23 @@
             {% if produits | length > 0 %}
                 {{ form_start(form, { 'attr': {'class': 'form-inline'}}) }}
                 {{ form_errors(form) }}
-                <div class="row">
-                    {% for produit in produits %}
-
+                {% for produit in produits %}
+                    <div class="row mb-2">
+                        {% set col = '<div class="col-6 hidden"></div>' %}
+                        {% if produit.associatedProducts | length > 0 %}
+                            {% set col = '' %}
+                        {% endif %}
                         <div class="col-6">
                             {% include '@AcMarcheMaintenanceShop/commande/_produit_line.html.twig' %}
                             {% include '@AcMarcheMaintenanceShop/commande/_result_add_panier.html.twig' %}
                         </div>
-
-                        {# % include '@AcMarcheMaintenanceShop/commande/_produits_associated.html.twig' % #}
-                    {% endfor %}
-                </div>
+                        {% include '@AcMarcheMaintenanceShop/commande/_produits_associated.html.twig' %}
+                        {{col|raw}}
+                    </div>
+                    <hr>
+                {% endfor %}
                 {{ form_end(form) }}
             {% endif %}
-
         </div>
     </div>
 
@@ -53,16 +56,16 @@
                 }).then(function (response) {
                     return response.text()
                     if (response.ok) {
-                        console.log(document.querySelector("#result"));
+                        //console.log(document.querySelector("#result"));
                     }
                     return Promise.reject(response);
                 }).then(function (data) {
-                    document.querySelector("#result-"+produitId).innerHTML = data;
-                    console.log(data);
+                    document.querySelector("#result-" + produitId).innerHTML = data;
                 }).catch(function (error) {
+                    document.querySelector("#result-" + produitId).innerHTML = error.toString();
                     console.warn('Something went wrong.', error);
                 });
             })
-        }); // document.querySelector("#commande_result_" + produitId).html = data;
+        });
     </script>
 {% endblock %}
