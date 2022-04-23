@@ -11,9 +11,7 @@ use AcMarche\MaintenanceShop\Form\Search\SearchProduitType;
 use AcMarche\MaintenanceShop\Repository\CommandeProduitRepository;
 use AcMarche\MaintenanceShop\Repository\CommandeRepository;
 use AcMarche\MaintenanceShop\Repository\ProduitRepository;
-use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,7 +27,6 @@ class CommandeController extends AbstractController
         private ProduitRepository $produitRepository,
         private CommandeRepository $commandeRepository,
         private CommandeProduitRepository $commandeProduitRepository,
-        private ManagerRegistry $managerRegistry
     ) {
     }
 

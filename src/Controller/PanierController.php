@@ -59,8 +59,6 @@ class PanierController extends AbstractController
             $em->persist($commande);
             $em->flush();
 
-            $this->addFlash('success', '');
-
             return $this->redirectToRoute('acmaintenance_panier');
         }
 
