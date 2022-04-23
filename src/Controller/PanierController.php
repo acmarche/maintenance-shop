@@ -76,8 +76,15 @@ class PanierController extends AbstractController
     #[Route(path: '/update', name: 'acmaintenance_commande_update_quantite', methods: ['POST'])]
     public function updateQuantite(Request $request)
     {
-        $id = $request->get('id');
-        $quantite = $request->get('quantite');
+        $id = $quantite = null;
+        try {
+            $data = json_decode($request->getContent());
+            $id = $data->id;
+            $quantite = $data->quantite;
+        } catch (\Exception $exception) {
+
+        }
+
         if (!$id || !$quantite) {
             return $this->render(
                 '@AcMarcheMaintenanceShop/commande/result.html.twig',
@@ -87,6 +94,7 @@ class PanierController extends AbstractController
                 ]
             );
         }
+
         if ($quantite < 1) {
             return $this->render(
                 '@AcMarcheMaintenanceShop/commande/result.html.twig',
@@ -126,8 +134,16 @@ class PanierController extends AbstractController
     #[Route(path: '/delete', name: 'acmaintenance_commande_delete', methods: ['POST'])]
     public function deleteProduit(Request $request)
     {
-        $id = $request->get('id');
+        $id = null;
+        try {
+            $data = json_decode($request->getContent());
+            $id = $data->id;
+        } catch (\Exception $exception) {
+
+        }
+
         $result = [];
+
         if (!$id) {
             $result['status'] = 'error';
             $txt = $this->renderView(
@@ -139,7 +155,7 @@ class PanierController extends AbstractController
             );
             $result['message'] = $txt;
 
-            return (new JsonResponse())->create($result);
+            return new JsonResponse($result);
         }
         $em = $this->managerRegistry->getManager();
         $commandeProduit = $em->getRepository(CommandeProduit::class)->find($id);
@@ -154,7 +170,7 @@ class PanierController extends AbstractController
                 ]
             );
 
-            return (new JsonResponse())->create($result);
+            return new JsonResponse($result);
         }
         $em->remove($commandeProduit);
         $em->flush();
@@ -166,6 +182,6 @@ class PanierController extends AbstractController
             ]
         );
 
-        return (new JsonResponse())->create($result);
+        return new JsonResponse($result);
     }
 }

@@ -5,15 +5,11 @@
     <div class="card">
         <h3 class="card-header">Votre panier</h3>
         <div class="card-body">
-
-
             <div id="message"></div>
-
             {% if commande.totalQuantite > 0 %}
                 <div id="result">
                     {% include '@AcMarcheMaintenanceShop/panier/_list_produits.html.twig' %}
                 </div>
-
                 {{ form_start(form, { 'attr': {'class': 'well'} }) }}
                 {{ form_errors(form) }}
                 <div class="row">
@@ -39,36 +35,70 @@
 
 {% endblock %}
 {% block scripts %}
-    <script>
-        $(".quantite-control").focusout(function () {
-            var produitCommandeId = jQuery(this).attr("data-commande");
-            var quantite = $("#commande_quantite_" + produitCommandeId).val();
+    <script type="text/javascript">
+        let elements = document.querySelectorAll('.quantite-control');
 
-            $.post("{{ path('acmaintenance_commande_update_quantite') }}",
-                {
+        Array.prototype.forEach.call(elements, function (element, i) {
+            element.addEventListener('focusout', () => {
+                let produitCommandeId = element.dataset.commande;
+                let quantite = document.querySelector("#commande_quantite_" + produitCommandeId).value;
+                console.log(quantite);
+                console.log(produitCommandeId);
+
+                let data = {
                     id: produitCommandeId,
                     quantite: quantite
-                },
-                function (data, status) {
-                    console.log("updater");
-                    $("#message").html(data);
-                });
-        });
+                };
 
-        $(".produit-control").click(function () {
-            var produitCommandeId = jQuery(this).attr("data-produit");
-
-            $.post("{{ path('acmaintenance_commande_delete') }}",
-                {
-                    id: produitCommandeId
-                },
-                function (data, status) {
-                    if (data.status == 'error') {
-                        $("#message").html(data.message);
-                    } else {
-                        $("#result").html(data.message);
+                fetch("{{ path('acmaintenance_commande_update_quantite') }}", {
+                    method: "POST",
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
+                }).then(function (response) {
+                    return response.text()
+                    if (response.ok) {
+                        //console.log(document.querySelector("#result"));
                     }
+                    return Promise.reject(response);
+                }).then(function (data) {
+                    document.querySelector("#message").innerHTML = data;
+                }).catch(function (error) {
+                    document.querySelector("#message").innerHTML = error.toString();
+                    console.warn('Something went wrong.', error);
                 });
+
+            })
         });
+
+        let elements2 = document.querySelectorAll('.produit-control');
+
+        Array.prototype.forEach.call(elements2, function (element, i) {
+            element.addEventListener('click', () => {
+                let produitCommandeId = element.dataset.produit;
+
+                let data = {
+                    id: produitCommandeId,
+                };
+
+                fetch("{{ path('acmaintenance_commande_delete') }}", {
+                    method: "POST",
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
+                }).then(function (response) {
+                    return response.json()
+                    if (response.ok) {
+                        //console.log(document.querySelector("#result"));
+                    }
+                    return Promise.reject(response);
+                }).then(function (data) {
+                    document.querySelector("#result").innerHTML = data.message;
+                }).catch(function (error) {
+                    document.querySelector("#message").innerHTML = error.message;
+                    console.warn('Something went wrong.', error);
+                });
+
+            })
+        });
+
     </script>
 {% endblock %}
