@@ -19,14 +19,17 @@ class Mailer
      */
     public function sendPanier(Commande $commande): void
     {
+        $css = file_get_contents('/var/www/commande/src/AcMarche/MaintenanceShop/public/css/mail.css');
         $mail = (new TemplatedEmail())
             ->subject('Nouvelle commande de fournitures')
             ->from($this->parameterBag->get('acmarche_maintenanceshop.email'))
             ->to($this->parameterBag->get('acmarche_maintenance_shop.to1'))
             ->textTemplate('@AcMarcheMaintenanceShop/mail/commande.txt.twig')
+            ->htmlTemplate('@AcMarcheMaintenanceShop/mail/commande.html.twig')
             ->context(
                 [
                     'commande' => $commande,
+                    'css' => $css,
                 ]
             );
 
