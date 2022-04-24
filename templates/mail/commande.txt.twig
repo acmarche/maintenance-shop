@@ -3,8 +3,8 @@ Pour livrer à  {{ commande.lieu }}
 
 Liste des produits
 
-{% for produit in commande.produits %}
-    {{ produit.quantite }} {{ produit.produit }}
+{% for commandeProduit in commande.produits %}
+    {{ commandeProduit.quantite }} {% if commandeProduit.produit.unite %} Unité: ({{ commandeProduit.produit.unite }}) {% endif %}  {{ commandeProduit.produit }}
 {% endfor %}
 
 {{ commande.commentaire | nl2br }}
@@ -12,4 +12,3 @@ Liste des produits
 Consulter la commande en ligne :
 
 {{ url('acmaintenance_commande_show', {'id' : commande.id}) }}
-

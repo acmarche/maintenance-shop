@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="fr" class="h-100">
+<head>
+    <meta charset="utf-8">
+    <title>Commande fournitures</title>
+    <style>
+        {{css}}
+    </style>
+</head>
+<body>
+<div class="p-4">
+    Nouvelle commande faite par {{ commande.nom }}  {{ commande.prenom }}<br/>
+
+    <strong>Pour livrer à {{ commande.lieu }}</strong>
+    <br/>
+    <br/>
+    Liste des produits
+    <br/>
+    <table class="min-w-full">
+        <thead class="border-b">
+        <tr>
+            <th scope="col" class="px-6 py-4 text-left text-sm font-medium text-gray-900">Produit</th>
+            <th scope="col" class="px-6 py-4 text-left text-sm font-medium text-gray-900">Quantité</th>
+            <th scope="col" class="px-6 py-4 text-left text-sm font-medium text-gray-900">Unité</th>
+        </tr>
+        </thead>
+        {% for commandeProduit in commande.produits %}
+            <tr class="border-b">
+                <td class="whitespace-nowrap px-6 py-4 text-sm font-light text-gray-900">
+                    {{ commandeProduit.produit }}
+                </td>
+                <td class="whitespace-nowrap px-6 py-4 text-sm font-light text-gray-900">{{ commandeProduit.quantite }}</td>
+                <td class="whitespace-nowrap px-6 py-4 text-sm font-light text-gray-900">
+                    {% if commandeProduit.produit.unite %}
+                        Unité: ({{ commandeProduit.produit.unite }})
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        <tbody>
+    </table>
+
+    {% if commande.commentaire %}
+        <br/>
+        {{ commande.commentaire | nl2br }}
+        <br/>
+    {% endif %}
+    <br/>
+    <a href="{{ absolute_url(path('acmaintenance_commande_show', {'id' : commande.id})) }}">
+        Consulter la commande en ligne
+    </a>
+</div>
+</body>
+</html>
