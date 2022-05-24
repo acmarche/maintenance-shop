@@ -26,7 +26,7 @@ class ProduitRepository extends ServiceEntityRepository
         return $this->findBy([], ['nom' => 'ASC']);
     }
 
-    public function setCriteria($args): QueryBuilder
+    public function setCriteria($args, bool $showAssociated = true): QueryBuilder
     {
         $nom = $args['nom'] ?? null;
         $categorie = $args['categorie'] ?? null;
@@ -46,11 +46,11 @@ class ProduitRepository extends ServiceEntityRepository
                 ->setParameter('cat', $categorie);
         }
 
-        if (!$nom) {
-       /*     $associated = $this->getAllAssociatedProducts();
+        if (!$showAssociated) {
+            $associated = $this->getAllAssociatedProducts();
             $qb->andWhere('produit NOT IN (:associated)')
                 ->setParameter('associated', $associated);
-        */}
+        }
 
         return $qb;
     }
@@ -76,9 +76,9 @@ class ProduitRepository extends ServiceEntityRepository
      *
      * @return Produit[]
      */
-    public function search($args): array
+    public function search($args, bool $associated = true): array
     {
-        $qb = $this->setCriteria($args);
+        $qb = $this->setCriteria($args, $associated);
 
         return $qb
             ->addOrderBy('produit.nom', 'ASC')
@@ -107,6 +107,11 @@ class ProduitRepository extends ServiceEntityRepository
         // $products = array_merge(...$products);
 
         return $products;
+    }
+
+    public function persist(Produit $produit): void
+    {
+        $this->_em->persist($produit);
     }
 
     public function remove(Produit $produit): void
