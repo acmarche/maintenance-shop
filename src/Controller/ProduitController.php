@@ -5,6 +5,7 @@ namespace AcMarche\MaintenanceShop\Controller;
 use AcMarche\MaintenanceShop\Entity\Produit;
 use AcMarche\MaintenanceShop\Form\ProduitType;
 use AcMarche\MaintenanceShop\Form\Search\SearchProduitType;
+use AcMarche\MaintenanceShop\Repository\CommandeProduitRepository;
 use AcMarche\MaintenanceShop\Repository\ProduitRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,8 +22,10 @@ use Symfony\Component\Routing\Annotation\Route;
 #[IsGranted(data: 'ROLE_MAINTENANCE_ADMIN')]
 class ProduitController extends AbstractController
 {
-    public function __construct(private ProduitRepository $produitRepository)
-    {
+    public function __construct(
+        private ProduitRepository $produitRepository,
+        private CommandeProduitRepository $commandeProduitRepository
+    ) {
     }
 
     /**
@@ -128,9 +131,9 @@ class ProduitController extends AbstractController
     public function delete(Request $request, Produit $produit): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$produit->getId(), $request->request->get('_token'))) {
-            $commandesProduit = $this->produitRepository->findBy(['produit' => $produit]);
+            $commandesProduit = $this->commandeProduitRepository->findBy(['produit' => $produit]);
             foreach ($commandesProduit as $commandeProduit) {
-                $this->produitRepository->remove($commandeProduit);
+                $this->commandeProduitRepository->remove($commandeProduit);
             }
 
             $this->produitRepository->remove($produit);
