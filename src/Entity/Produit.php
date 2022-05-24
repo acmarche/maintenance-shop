@@ -41,7 +41,7 @@ class Produit implements TimestampableInterface, Stringable
     protected ?string $unite;
     #[ORM\ManyToOne(targetEntity: Categorie::class, inversedBy: 'produits')]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
-    protected Categorie $categorie;
+    protected ?Categorie $categorie = null;
     /**
      * @var Produit[]
      */
