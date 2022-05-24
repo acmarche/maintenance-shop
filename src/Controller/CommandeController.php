@@ -47,7 +47,7 @@ class CommandeController extends AbstractController
         $search_form->handleRequest($request);
         if ($search_form->isSubmitted() && $search_form->isValid()) {
             $data = $search_form->getData();
-            $produits = $this->produitRepository->search($data);
+            $produits = $this->produitRepository->search($data, true);
         }
 
         return $this->render(
