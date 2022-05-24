@@ -28,4 +28,9 @@ class CommandeProduitRepository extends ServiceEntityRepository
     {
         $this->_em->flush();
     }
+
+    public function remove(CommandeProduit $commandeProduit)
+    {
+        $this->_em->remove($commandeProduit);
+    }
 }
