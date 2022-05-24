@@ -33,18 +33,11 @@ class CommandeController extends AbstractController
     #[Route(path: '/', name: 'acmaintenance_commande', methods: ['GET'])]
     public function index(Request $request): RedirectResponse|Response
     {
-        $session = $request->getSession();
-        $search = false;
         $data = [];
-        $key = 'maintenance_shop_commande';
-        if ($session->has($key)) {
-            $data = unserialize($session->get($key));
-        }
+
         $search_form = $this->createForm(
-            SearchProduitType::class,
-            $data,
+            SearchProduitType::class, $data,
             [
-                'action' => $this->generateUrl('acmaintenance_commande'),
                 'method' => 'GET',
             ]
         );
@@ -53,17 +46,14 @@ class CommandeController extends AbstractController
         $produits = [];
         $search_form->handleRequest($request);
         if ($search_form->isSubmitted() && $search_form->isValid()) {
-
             $data = $search_form->getData();
-            $session->set($key, serialize($data));
-            $search = true;
             $produits = $this->produitRepository->search($data);
         }
 
         return $this->render(
             '@AcMarcheMaintenanceShop/commande/index.html.twig',
             [
-                'search' => $search,
+                'search' => $form->isSubmitted(),
                 'search_form' => $search_form->createView(),
                 'form' => $form->createView(),
                 'produits' => $produits,

@@ -10,7 +10,7 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * @method Categorie|null find($id, $lockMode = null, $lockVersion = null)
  * @method Categorie|null findOneBy(array $criteria, array $orderBy = null)
- *                                                                                                      method Categorie[]    findAll()
+ * method Categorie[]    findAll()
  * @method Categorie[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class CategorieRepository extends ServiceEntityRepository
@@ -23,28 +23,6 @@ class CategorieRepository extends ServiceEntityRepository
     public function findAll(): array
     {
         return $this->findBy([], ['nom' => 'ASC']);
-    }
-
-    /**
-     * Pour formulaire avec liste deroulante.
-     *
-     * @return Categorie[]
-     */
-    public function getForSearch(): array
-    {
-        $qb = $this->createQueryBuilder('c');
-
-        $qb->orderBy('c.nom');
-        $query = $qb->getQuery();
-
-        $results = $query->getResult();
-        $categories = [];
-
-        foreach ($results as $categorie) {
-            $categories[$categorie->getNom()] = $categorie->getId();
-        }
-
-        return $categories;
     }
 
     public function getQbl(): QueryBuilder

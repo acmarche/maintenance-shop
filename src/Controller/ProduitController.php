@@ -2,12 +2,10 @@
 
 namespace AcMarche\MaintenanceShop\Controller;
 
-use AcMarche\MaintenanceShop\Entity\CommandeProduit;
 use AcMarche\MaintenanceShop\Entity\Produit;
 use AcMarche\MaintenanceShop\Form\ProduitType;
 use AcMarche\MaintenanceShop\Form\Search\SearchProduitType;
 use AcMarche\MaintenanceShop\Repository\ProduitRepository;
-use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -23,45 +21,29 @@ use Symfony\Component\Routing\Annotation\Route;
 #[IsGranted(data: 'ROLE_MAINTENANCE_ADMIN')]
 class ProduitController extends AbstractController
 {
-    public function __construct(private ProduitRepository $produitRepository, private ManagerRegistry $managerRegistry)
+    public function __construct(private ProduitRepository $produitRepository)
     {
     }
 
     /**
      * Lists all Produit entities.
      */
-    #[Route(path: '/', name: 'acmaintenance_produit', methods: ['GET'])]
+    #[Route(path: '/', name: 'acmaintenance_produit', methods: ['GET', 'POST'])]
     public function index(Request $request): RedirectResponse|Response
     {
-        $em = $this->managerRegistry->getManager();
-        $session = $request->getSession();
-
-        $data = [];
-        $key = 'maintenance_shop_search';
-        if ($session->has($key)) {
-            $data = unserialize($session->get($key));
-        }
-        $search_form = $this->createForm(
-            SearchProduitType::class,
-            $data,
-            [
-                'action' => $this->generateUrl('acmaintenance_produit'),
-                'method' => 'GET',
-            ]
-        );
+        $search_form = $this->createForm(SearchProduitType::class);
         $produits = [];
         $search_form->handleRequest($request);
         if ($search_form->isSubmitted() && $search_form->isValid()) {
             $data = $search_form->getData();
-            $session->set($key, serialize($data));
-            $produits = $em->getRepository(Produit::class)->search($data);
+            $produits = $this->produitRepository->search($data);
         }
 
         return $this->render(
             '@AcMarcheMaintenanceShop/produit/index.html.twig',
             [
-                'search' => $search_form->isSubmitted(),
                 'search_form' => $search_form->createView(),
+                'search' => $search_form->isSubmitted(),
                 'produits' => $produits,
             ]
         );
@@ -78,10 +60,9 @@ class ProduitController extends AbstractController
             ->add('saveAndCreateNew', SubmitType::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->managerRegistry->getManager();
 
-            $em->persist($entity);
-            $em->flush();
+            $this->produitRepository->persist($entity);
+            $this->produitRepository->flush();
 
             $this->addFlash('success', 'Le produit a bien été ajouté.');
 
@@ -124,8 +105,8 @@ class ProduitController extends AbstractController
         $editForm = $this->createForm(ProduitType::class, $produit);
         $editForm->handleRequest($request);
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em = $this->managerRegistry->getManager();
-            $em->flush();
+
+            $this->produitRepository->flush();
             $this->addFlash('success', 'Le produit a bien été mise à jour.');
 
             return $this->redirectToRoute('acmaintenance_produit_show', ['id' => $produit->getId()]);
@@ -146,15 +127,14 @@ class ProduitController extends AbstractController
     #[Route(path: '/{id}', name: 'acmaintenance_produit_delete', methods: ['POST'])]
     public function delete(Request $request, Produit $produit): RedirectResponse
     {
-        $em = $this->managerRegistry->getManager();
         if ($this->isCsrfTokenValid('delete'.$produit->getId(), $request->request->get('_token'))) {
-            $commandesProduit = $em->getRepository(CommandeProduit::class)->findBy(['produit' => $produit]);
+            $commandesProduit = $this->produitRepository->findBy(['produit' => $produit]);
             foreach ($commandesProduit as $commandeProduit) {
-                $em->remove($commandeProduit);
+                $this->produitRepository->remove($commandeProduit);
             }
 
             $this->produitRepository->remove($produit);
-            $em->flush();
+            $this->produitRepository->flush();
             $this->addFlash('success', 'Le produit a bien été supprimé.');
         }
 

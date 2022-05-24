@@ -2,12 +2,12 @@
 
 namespace AcMarche\MaintenanceShop\Form\Search;
 
+use AcMarche\MaintenanceShop\Entity\Categorie;
 use AcMarche\MaintenanceShop\Repository\CategorieRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SearchType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SearchProduitType extends AbstractType
 {
@@ -17,8 +17,6 @@ class SearchProduitType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $categories = $this->categorieRepository->getForSearch();
-
         $builder
             ->add(
                 'nom',
@@ -32,17 +30,13 @@ class SearchProduitType extends AbstractType
             )
             ->add(
                 'categorie',
-                ChoiceType::class,
+                EntityType::class,
                 [
-                    'choices' => $categories,
+                    'class' => Categorie::class,
+                    'query_builder' => $this->categorieRepository->getQbl(),
                     'required' => false,
                     'placeholder' => 'Choisissez une catégorie',
                 ]
             );
-    }
-
-    public function configureOptions(OptionsResolver $resolver): void
-    {
-        $resolver->setDefaults([]);
     }
 }

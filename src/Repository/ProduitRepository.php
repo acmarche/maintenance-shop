@@ -2,6 +2,7 @@
 
 namespace AcMarche\MaintenanceShop\Repository;
 
+use AcMarche\MaintenanceShop\Entity\Categorie;
 use AcMarche\MaintenanceShop\Entity\Produit;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -28,7 +29,7 @@ class ProduitRepository extends ServiceEntityRepository
     public function setCriteria($args): QueryBuilder
     {
         $nom = $args['nom'] ?? null;
-        $categorie = $args['categorie'] ?? 0;
+        $categorie = $args['categorie'] ?? null;
 
         $qb = $this->createQueryBuilder('produit');
         $qb->leftJoin('produit.categorie', 'categorie', 'WITH');
@@ -46,12 +47,28 @@ class ProduitRepository extends ServiceEntityRepository
         }
 
         if (!$nom) {
-            $associated = $this->getAllAssociatedProducts();
+       /*     $associated = $this->getAllAssociatedProducts();
             $qb->andWhere('produit NOT IN (:associated)')
                 ->setParameter('associated', $associated);
-        }
+        */}
 
         return $qb;
+    }
+
+    /**
+     * @param Categorie $categorie
+     * @return Produit[]
+     */
+    public function findByCategorie(Categorie $categorie): array
+    {
+        return $this->createQueryBuilder('produit')
+            ->leftJoin('produit.categorie', 'categorie', 'WITH')
+            ->leftJoin('produit.associatedProducts', 'associatedProducts', 'WITH')
+            ->addSelect('categorie', 'associatedProducts')
+            ->andWhere('produit.categorie = :cat')
+            ->setParameter('cat', $categorie)
+            ->addOrderBy('produit.nom', 'ASC')
+            ->getQuery()->getResult();
     }
 
     /**
@@ -101,5 +118,6 @@ class ProduitRepository extends ServiceEntityRepository
     {
         $this->_em->flush();
     }
+
 
 }

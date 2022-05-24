@@ -37,13 +37,12 @@ class CategorieController extends AbstractController
     #[Route(path: '/', name: 'acmaintenance_categorie', methods: ['GET'])]
     public function index(): Response
     {
-        $em = $this->managerRegistry->getManager();
-        $entities = $em->getRepository(Categorie::class)->findAll();
+        $categories = $this->categorieRepository->findAll();
 
         return $this->render(
             '@AcMarcheMaintenanceShop/categorie/index.html.twig',
             [
-                'categories' => $entities,
+                'categories' => $categories,
             ]
         );
     }
@@ -84,10 +83,13 @@ class CategorieController extends AbstractController
     #[Route(path: '/{id}', name: 'acmaintenance_categorie_show', methods: ['GET'])]
     public function show(Categorie $categorie): Response
     {
+        $produits = $this->produitRepository->findByCategorie($categorie);
+
         return $this->render(
             '@AcMarcheMaintenanceShop/categorie/show.html.twig',
             [
                 'categorie' => $categorie,
+                'produits' => $produits,
             ]
         );
     }

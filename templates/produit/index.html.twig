@@ -3,7 +3,7 @@
 {% block body -%}
 
     <div class="card">
-        <h3 class="card-header">Gestion des produits</h3>
+        <h3 class="card-header">Gestion des produits {% if search %}({{ produits | length }}) {% endif %}</h3>
         <div class="card-body">
             {% if is_granted('ROLE_MAINTENANCE_ADMIN') %}
                 <a class="btn btn-primary m-2" role="button"
