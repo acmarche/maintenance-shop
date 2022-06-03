@@ -41,15 +41,17 @@
 
 {% block javascripts %}
     <script type="text/javascript">
-        document.querySelector('.unlinkproduct').addEventListener('click', function (event) {
-                let button = event.target;
-                let associateId = button.dataset.associateid;
-                let produitId = button.dataset.produitid;
-                let relationToken = button.dataset.token;
+        let elements = document.querySelectorAll(".unlinkproduct");
+        Array.prototype.forEach.call(elements, function (element, i) {
+            element.addEventListener('click', () => {
+                //document.querySelector("#userid").value = element.dataset.id;
+                let associateId = element.dataset.associateid;
+                let produitId = element.dataset.produitid;
+                let relationToken = element.dataset.token;
                 document.querySelector("#associateId").value = associateId;
                 document.querySelector("#produitId").value = produitId;
                 document.querySelector("#relationtoken").value = relationToken;
-            }
-        );
+            });
+        });
     </script>
 {% endblock %}

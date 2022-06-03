@@ -4,7 +4,7 @@
     {% for product in produit.associatedProducts %}
         <tr>
             <td>
-                <a href="{{ path('acmaintenance_produit_show', { 'id': produit.id }) }}">
+                <a href="{{ path('acmaintenance_produit_show', { 'id': product.id }) }}">
                     {{ product.nom }}
                 </a>
             </td>

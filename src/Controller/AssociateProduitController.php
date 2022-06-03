@@ -12,9 +12,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Produit controller.
- */
 #[Route(path: '/associate/produit')]
 #[IsGranted(data: 'ROLE_MAINTENANCE_ADMIN')]
 class AssociateProduitController extends AbstractController
@@ -63,6 +60,11 @@ class AssociateProduitController extends AbstractController
         $produitAssociatedId = $request->request->get('associateid');
         $produitId = $request->request->get('produitid');
         $produit = $this->produitRepository->find($produitId);
+        if (!$produit) {
+            $this->addFlash('danger', 'Produit non trouvé');
+
+            return $this->redirectToRoute('acmaintenance_produit');
+        }
         if (!$produitAssociatedId) {
             $this->addFlash('danger', 'Produit non trouvé');
 
