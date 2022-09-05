@@ -15,7 +15,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
  *
  * @see http://symfony.com/doc/current/cookbook/bundles/extension.html
  */
-class AcMarcheMaintenanceShopExtension extends Extension implements PrependExtensionInterface
+class AcMarcheMaintenanceShopExtension
 {
     private PhpFileLoader $loader;
 
