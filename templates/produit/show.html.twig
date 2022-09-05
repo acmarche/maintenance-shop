@@ -9,12 +9,20 @@
             {% include '@AcMarcheMaintenanceShop/produit/actions.html.twig' %}
             <br/>
 
-            <p class="text-success">Catégorie:
-                <strong>{{ produit.categorie }}</strong>
-            </p>
-            <p class="text-success">Unité:
-                <strong>{{ produit.unite }}</strong>
-            </p>
+            <table class="table table-bordered">
+                <tr>
+                    <th>Catégorie</th>
+                    <td>{{ produit.categorie }}</td>
+                </tr>
+                <tr>
+                    <th>Quantité</th>
+                    <td>{{ produit.quantite }}</td>
+                </tr>
+                <tr>
+                    <th>Unité</th>
+                    <td>{{ produit.unite }}</td>
+                </tr>
+            </table>
 
             {% if produit.imageName %}
                 <img src="{{ vich_uploader_asset(produit, 'imageFile')| imagine_filter('produit_thumb') }}"

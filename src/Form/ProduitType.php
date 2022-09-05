@@ -5,9 +5,9 @@ namespace AcMarche\MaintenanceShop\Form;
 use AcMarche\MaintenanceShop\Entity\Categorie;
 use AcMarche\MaintenanceShop\Entity\Produit;
 use AcMarche\MaintenanceShop\Repository\CategorieRepository;
-use AcMarche\MaintenanceShop\Repository\ProduitRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -36,6 +36,14 @@ class ProduitType extends AbstractType
                 [
                     'label' => 'Unité',
                     'help' => 'pièce, boite de x...',
+                    'required' => false,
+                ]
+            )
+            ->add(
+                'quantite',
+                IntegerType::class,
+                [
+                    'label' => 'Quantité',
                     'required' => false,
                 ]
             )

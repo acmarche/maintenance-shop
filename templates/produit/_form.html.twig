@@ -1,10 +1,11 @@
 {{ form_start(form) }}
 {{ form_errors(form) }}
 {{ form_row(form.nom) }}
+{{ form_row(form.categorie) }}
 <div class="row">
 
     <div class="col-6">
-        {{ form_row(form.categorie) }}
+        {{ form_row(form.quantite) }}
     </div>
     <div class="col-6">
         {{ form_row(form.unite) }}
