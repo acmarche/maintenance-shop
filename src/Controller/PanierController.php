@@ -114,7 +114,7 @@ class PanierController extends AbstractController
             );
         }
         if ($quantite == $commandeProduit->getQuantite()) {
-            return (new Response())->create('');
+            return new Response('');
         }
         $commandeProduit->setQuantite($quantite);
         $em->persist($commandeProduit);
