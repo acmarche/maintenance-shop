@@ -15,7 +15,11 @@
         {% for commande in commandes %}
             <tr>
                 <td>{{ commande.id }}</td>
-                <td>{{ commande.createdAt | format_date('full') }}</td>
+                <td>
+                    {% if commande.createdAt %}
+                        {{ commande.createdAt| format_date('full') }}
+                    {% endif %}
+                </td>
                 <td>
                     <a href="{{ path('acmaintenance_commande_archive_show', {'id': commande.id}) }}">Détails</a>
                 </td>

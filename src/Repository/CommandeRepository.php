@@ -19,10 +19,7 @@ class CommandeRepository extends ServiceEntityRepository
         parent::__construct($registry, Commande::class);
     }
 
-    /**
-     * @return Commande
-     */
-    public function getCommandeActive()
+    public function getCommandeActive():?Commande
     {
         $qb = $this->createQueryBuilder('commande');
         $qb->leftJoin('commande.produits', 'produits', 'WITH');
@@ -33,6 +30,19 @@ class CommandeRepository extends ServiceEntityRepository
         $query = $qb->getQuery();
 
         return $query->getOneOrNullResult();
+    }
+
+    /**
+     * @return Commande[]
+     */
+    public function findSended(): array
+    {
+        return $this->createQueryBuilder('commande')
+            ->leftJoin('commande.produits', 'produits', 'WITH')
+            ->addSelect('produits')
+            ->andWhere('commande.envoye = 1')
+            ->addOrderBy('commande.id', 'DESC')
+            ->getQuery()->getResult();
     }
 
     public function remove(Commande $commande): void

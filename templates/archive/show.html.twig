@@ -5,17 +5,19 @@
 {% endblock %}
 
 {% block body %}
- <div class="page-header">
+    <div class="page-header">
         <h3>Archive commande {{ commande.id }}</h3>
     </div>
 
-    <h4 class="text-success">Commande crée le {{ commande.createdAt | format_date('full') }}</h4>
+    {% if commande.createdAt %}
+        <h4 class="text-success">Commande crée le {{ commande.createdAt | format_date('full') }}</h4>
+    {% endif %}
 
     <strong>Pour {{ commande.nom }} {{ commande.prenom }} à {{ commande.lieu }}</strong>
-    <br /><br />
+    <br/><br/>
 
     {{ commande.commentaire | nl2br }}
-    <br /><br />
+    <br/><br/>
     {{ commande.archivesProduits | raw }}
 
 {% endblock %}
