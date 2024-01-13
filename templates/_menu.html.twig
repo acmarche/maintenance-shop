@@ -2,17 +2,17 @@
 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
     <li class="nav-item">
         <a href="{{ path('acmaintenance_commande') }}" class="nav-link">
-            <i class="fas fa-cart-plus"></i> Nouvelle commande</a>
+            <i class="ti ti-shopping-bag-plus"></i> Nouvelle commande</a>
     </li>
     <li class="nav-item">
         <a href="{{ path('acmaintenance_panier') }}" class="nav-link">
-            <i class="fas fa-shopping-bag"></i> Panier</a>
+            <i class="ti ti-shopping-bag"></i> Panier</a>
     </li>
 
     {% if is_granted('ROLE_MAINTENANCE_ADMIN') %}
         <li class="nav-item">
             <a href="{{ path('acmaintenance_produit') }}" class="nav-link">
-                <i class="fas fa-search"></i> Gestion des produits
+                <i class="ti ti-search"></i> Gestion des produits
             </a>
         </li>
         <li class="nav-item dropdown">
@@ -41,11 +41,11 @@
 <ul class="navbar-nav mb-2 mb-lg-0">
     {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
         <li class="nav-item">
-            <a href="{{ path('app_login') }}" class="nav-link"><i class="fas fa-sign-in-alt"></i>
+            <a href="{{ path('app_login') }}" class="nav-link"><i class="ti ti-login-2"></i>
                 Se connecter</a>
         </li>
     {% else %}
-        <li class="nav-item"><a href="{{ path('app_logout') }}" class="nav-link"><i class="fas fa-sign-out-alt"></i>
+        <li class="nav-item"><a href="{{ path('app_logout') }}" class="nav-link"><i class="ti ti-logout"></i>
                 Déconnexion</a>
         </li>
     {% endif %}
