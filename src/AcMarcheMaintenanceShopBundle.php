@@ -6,7 +6,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 
-class AcMarcheMaintenanceShopBundle extends AbstractBundle
+class AcMarcheMaintenanceShopBundle  extends AbstractBundle
 {
     public function getPath(): string
     {
@@ -22,6 +22,7 @@ class AcMarcheMaintenanceShopBundle extends AbstractBundle
     {
         $container->import('../config/packages/doctrine.php');
         $container->import('../config/packages/liip_imagine.php');
+        $container->import('../config/packages/rate_limiter.php');
         $container->import('../config/packages/security.php');
         $container->import('../config/packages/twig.php');
         $container->import('../config/packages/vich_uploader.php');
