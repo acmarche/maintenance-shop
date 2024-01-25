@@ -29,9 +29,6 @@ class CategorieController extends AbstractController
     ) {
     }
 
-    /**
-     * Lists all Categorie categories.
-     */
     #[Route(path: '/', name: 'acmaintenance_categorie', methods: ['GET'])]
     public function index(): Response
     {
