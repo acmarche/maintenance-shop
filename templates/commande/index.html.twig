@@ -38,13 +38,13 @@
 {% endblock %}
 {% block scripts %}
     <script type="text/javascript">
-        let elements = document.querySelectorAll('.boutonadd');
+        var btnsadd = document.querySelectorAll('.boutonadd');
 
-        Array.prototype.forEach.call(elements, function (element, i) {
+        Array.prototype.forEach.call(btnsadd, function (element, i) {
             element.addEventListener('click', () => {
-                let produitId = element.dataset.produit;
-                let quantite = document.querySelector("#commande_quantite_" + produitId).value;
-                let data = {
+                var produitId = element.dataset.produit;
+                var quantite = document.querySelector("#commande_quantite_" + produitId).value;
+                var data = {
                     produit: produitId,
                     quantite: quantite
                 };

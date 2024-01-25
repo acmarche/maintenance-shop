@@ -36,16 +36,16 @@
 {% endblock %}
 {% block scripts %}
     <script type="text/javascript">
-        let elements = document.querySelectorAll('.quantite-control');
+        var btnsquantite = document.querySelectorAll('.quantite-control');
 
-        Array.prototype.forEach.call(elements, function (element, i) {
+        Array.prototype.forEach.call(btnsquantite, function (element, i) {
             element.addEventListener('focusout', () => {
-                let produitCommandeId = element.dataset.commande;
-                let quantite = document.querySelector("#commande_quantite_" + produitCommandeId).value;
+                var produitCommandeId = element.dataset.commande;
+                var quantite = document.querySelector("#commande_quantite_" + produitCommandeId).value;
                 console.log(quantite);
                 console.log(produitCommandeId);
 
-                let data = {
+                var data = {
                     id: produitCommandeId,
                     quantite: quantite
                 };
@@ -70,13 +70,13 @@
             })
         });
 
-        let elements2 = document.querySelectorAll('.produit-control');
+        var elements2 = document.querySelectorAll('.produit-control');
 
         Array.prototype.forEach.call(elements2, function (element, i) {
             element.addEventListener('click', () => {
-                let produitCommandeId = element.dataset.produit;
+                var produitCommandeId = element.dataset.produit;
 
-                let data = {
+                var data = {
                     id: produitCommandeId,
                 };
 

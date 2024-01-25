@@ -41,13 +41,13 @@
 
 {% block scripts %}
     <script type="text/javascript">
-        let elements = document.querySelectorAll(".unlinkproduct");
-        Array.prototype.forEach.call(elements, function (element, i) {
+        var btns = document.querySelectorAll(".unlinkproduct");
+        Array.prototype.forEach.call(btns, function (element, i) {
             element.addEventListener('click', () => {
                 //document.querySelector("#userid").value = element.dataset.id;
-                let associateId = element.dataset.associateid;
-                let produitId = element.dataset.produitid;
-                let relationToken = element.dataset.token;
+                var associateId = element.dataset.associateid;
+                var produitId = element.dataset.produitid;
+                var relationToken = element.dataset.token;
                 document.querySelector("#associateId").value = associateId;
                 document.querySelector("#produitId").value = produitId;
                 document.querySelector("#relationtoken").value = relationToken;
