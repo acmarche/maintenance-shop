@@ -7,25 +7,25 @@ use AcMarche\MaintenanceShop\Form\UtilisateurEditType;
 use AcMarche\MaintenanceShop\Form\UtilisateurType;
 use AcMarche\MaintenanceShop\Repository\UserRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/utilisateur')]
-#[IsGranted(data: 'ROLE_MAINTENANCE_ADMIN')]
+#[IsGranted('ROLE_MAINTENANCE_ADMIN')]
 class UtilisateurController extends AbstractController
 {
-    public function __construct(private UserRepository $userRepository, private UserPasswordHasherInterface $passwordEncoder, private ManagerRegistry $managerRegistry)
-    {
+    public function __construct(
+        private UserRepository $userRepository,
+        private UserPasswordHasherInterface $passwordEncoder,
+        private ManagerRegistry $managerRegistry
+    ) {
     }
 
-    /**
-     * Lists all Utilisateur entities.
-     */
     #[Route(path: '/', name: 'commande_utilisateur', methods: ['GET'])]
     public function index(): Response
     {
@@ -39,9 +39,6 @@ class UtilisateurController extends AbstractController
         );
     }
 
-    /**
-     * Displays a form to create a new Utilisateur utilisateur.
-     */
     #[Route(path: '/new', name: 'commande_utilisateur_new', methods: ['GET', 'POST'])]
     public function new(Request $request): RedirectResponse|Response
     {
@@ -69,9 +66,6 @@ class UtilisateurController extends AbstractController
         );
     }
 
-    /**
-     * Finds and displays a Utilisateur utilisateur.
-     */
     #[Route(path: '/{id}', name: 'commande_utilisateur_show', methods: ['GET'])]
     public function show(User $utilisateur): Response
     {
@@ -83,9 +77,6 @@ class UtilisateurController extends AbstractController
         );
     }
 
-    /**
-     * Displays a form to edit an existing Utilisateur utilisateur.
-     */
     #[Route(path: '/{id}/edit', name: 'commande_utilisateur_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, User $utilisateur): RedirectResponse|Response
     {
@@ -107,9 +98,6 @@ class UtilisateurController extends AbstractController
         );
     }
 
-    /**
-     * Deletes a Utilisateur utilisateur.
-     */
     #[Route(path: '/{id}', name: 'commande_utilisateur_delete', methods: ['POST'])]
     public function delete(Request $request, User $user): RedirectResponse
     {

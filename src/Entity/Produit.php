@@ -212,7 +212,7 @@ class Produit implements TimestampableInterface, Stringable
         return $this;
     }
 
-    public function getQuantite(): int
+    public function getQuantite(): ?int
     {
         return $this->quantite;
     }

@@ -7,19 +7,15 @@ use AcMarche\MaintenanceShop\Form\ProduitType;
 use AcMarche\MaintenanceShop\Form\Search\SearchProduitType;
 use AcMarche\MaintenanceShop\Repository\CommandeProduitRepository;
 use AcMarche\MaintenanceShop\Repository\ProduitRepository;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-/**
- * Produit controller.
- */
 #[Route(path: '/produit')]
-#[IsGranted(data: 'ROLE_MAINTENANCE_ADMIN')]
+#[IsGranted('ROLE_MAINTENANCE_ADMIN')]
 class ProduitController extends AbstractController
 {
     public function __construct(
@@ -56,19 +52,16 @@ class ProduitController extends AbstractController
     public function new(Request $request): RedirectResponse|Response
     {
         $entity = new Produit();
-        $form = $this->createForm(ProduitType::class, $entity)
-            ->add('saveAndCreateNew', SubmitType::class);
+        $form = $this->createForm(ProduitType::class, $entity);
+
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
 
             $this->produitRepository->persist($entity);
             $this->produitRepository->flush();
 
             $this->addFlash('success', 'Le produit a bien été ajouté.');
-
-            if ($form->get('saveAndCreateNew')->isClicked()) {
-                return $this->redirectToRoute('acmaintenance_produit_new');
-            }
 
             return $this->redirectToRoute('acmaintenance_produit_show', ['id' => $entity->getId()]);
         }

@@ -5,24 +5,21 @@ namespace AcMarche\MaintenanceShop\Controller;
 use AcMarche\MaintenanceShop\Entity\Produit;
 use AcMarche\MaintenanceShop\Form\ProduitAssociateType;
 use AcMarche\MaintenanceShop\Repository\ProduitRepository;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/associate/produit')]
-#[IsGranted(data: 'ROLE_MAINTENANCE_ADMIN')]
+#[IsGranted('ROLE_MAINTENANCE_ADMIN')]
 class AssociateProduitController extends AbstractController
 {
     public function __construct(private ProduitRepository $produitRepository)
     {
     }
 
-    /**
-     * Displays a form to edit an existing Produit produit.
-     */
     #[Route(path: '/{id}/edit', name: 'acmaintenance_produit_associate', methods: ['GET', 'POST'])]
     public function edit(Request $request, Produit $produit): RedirectResponse|Response
     {

@@ -7,20 +7,23 @@ use AcMarche\MaintenanceShop\Form\UtilisateurEditType;
 use AcMarche\MaintenanceShop\Form\UtilisateurPasswordType;
 use AcMarche\MaintenanceShop\Repository\UserRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/utilisateur/password')]
-#[IsGranted(data: 'ROLE_MAINTENANCE_ADMIN')]
+#[IsGranted('ROLE_MAINTENANCE_ADMIN')]
 class PasswordController extends AbstractController
 {
-    public function __construct(private UserRepository $userRepository, private UserPasswordHasherInterface $passwordEncoder, private ManagerRegistry $managerRegistry)
-    {
+    public function __construct(
+        private UserRepository $userRepository,
+        private UserPasswordHasherInterface $passwordEncoder,
+        private ManagerRegistry $managerRegistry
+    ) {
     }
 
     /**
@@ -54,8 +57,11 @@ class PasswordController extends AbstractController
      * Displays a form to edit an existing categorie entity.
      */
     #[Route(path: '/password/{id}', name: 'commande_utilisateur_password', methods: ['GET', 'POST'])]
-    public function password(Request $request, User $user, UserPasswordHasherInterface $userPasswordEncoder): RedirectResponse|Response
-    {
+    public function password(
+        Request $request,
+        User $user,
+        UserPasswordHasherInterface $userPasswordEncoder
+    ): RedirectResponse|Response {
         $em = $this->managerRegistry->getManager();
         $form = $this->createForm(UtilisateurPasswordType::class, $user);
         $form->handleRequest($request);
