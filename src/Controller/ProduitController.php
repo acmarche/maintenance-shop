@@ -28,33 +28,30 @@ class ProduitController extends AbstractController
     ) {
     }
 
-    /**
-     * Lists all Produit entities.
-     */
     #[Route(path: '/', name: 'acmaintenance_produit', methods: ['GET', 'POST'])]
     public function index(Request $request): RedirectResponse|Response
     {
-        $search_form = $this->createForm(SearchProduitType::class);
+        $form = $this->createForm(SearchProduitType::class);
         $produits = [];
-        $search_form->handleRequest($request);
-        if ($search_form->isSubmitted() && $search_form->isValid()) {
-            $data = $search_form->getData();
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
             $produits = $this->produitRepository->search($data);
         }
+
+        $response = new Response(null, $form->isSubmitted() ? Response::HTTP_ACCEPTED : Response::HTTP_OK);
 
         return $this->render(
             '@AcMarcheMaintenanceShop/produit/index.html.twig',
             [
-                'search_form' => $search_form->createView(),
-                'search' => $search_form->isSubmitted(),
+                'search_form' => $form->createView(),
+                'search' => $form->isSubmitted(),
                 'produits' => $produits,
             ]
+            , $response
         );
     }
 
-    /**
-     * Displays a form to create a new Produit produit.
-     */
     #[Route(path: '/new', name: 'acmaintenance_produit_new', methods: ['GET', 'POST'])]
     public function new(Request $request): RedirectResponse|Response
     {
@@ -85,9 +82,6 @@ class ProduitController extends AbstractController
         );
     }
 
-    /**
-     * Finds and displays a Produit produit.
-     */
     #[Route(path: '/{id}', name: 'acmaintenance_produit_show', methods: ['GET'])]
     public function show(Produit $produit): Response
     {
@@ -99,9 +93,6 @@ class ProduitController extends AbstractController
         );
     }
 
-    /**
-     * Displays a form to edit an existing Produit produit.
-     */
     #[Route(path: '/{id}/edit', name: 'acmaintenance_produit_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Produit $produit): RedirectResponse|Response
     {
@@ -124,9 +115,6 @@ class ProduitController extends AbstractController
         );
     }
 
-    /**
-     * Deletes a Produit produit.
-     */
     #[Route(path: '/{id}', name: 'acmaintenance_produit_delete', methods: ['POST'])]
     public function delete(Request $request, Produit $produit): RedirectResponse
     {
