@@ -45,7 +45,9 @@ class PanierController extends AbstractController
                 $this->mailer->sendPanier($commande);
                 $this->addFlash('success', 'La commande a bien été envoyé');
             } catch (TransportExceptionInterface $e) {
-                $this->addFlash('error', $e->getMessage());
+                $this->addFlash('danger', $e->getMessage());
+
+                return $this->redirectToRoute('acmaintenance_panier');
             }
 
             $commande->setEnvoye(true);
