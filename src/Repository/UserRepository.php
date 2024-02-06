@@ -2,6 +2,7 @@
 
 namespace AcMarche\MaintenanceShop\Repository;
 
+use AcMarche\MaintenanceShop\Doctrine\OrmCrudTrait;
 use AcMarche\MaintenanceShop\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -16,6 +17,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class UserRepository extends ServiceEntityRepository
 {
+    use OrmCrudTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);
@@ -40,17 +43,7 @@ class UserRepository extends ServiceEntityRepository
         }
 
         $user->setPassword($newEncodedPassword);
-        $this->_em->persist($user);
         $this->_em->flush();
     }
 
-    public function flush(): void
-    {
-        $this->_em->flush();
-    }
-
-    public function persist(User $utilisateur): void
-    {
-        $this->_em->persist($utilisateur);
-    }
 }

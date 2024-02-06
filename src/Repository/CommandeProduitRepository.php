@@ -2,6 +2,7 @@
 
 namespace AcMarche\MaintenanceShop\Repository;
 
+use AcMarche\MaintenanceShop\Doctrine\OrmCrudTrait;
 use AcMarche\MaintenanceShop\Entity\CommandeProduit;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -14,23 +15,10 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CommandeProduitRepository extends ServiceEntityRepository
 {
+    use OrmCrudTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CommandeProduit::class);
-    }
-
-    public function persist(CommandeProduit $commandeProduit): void
-    {
-        $this->_em->persist($commandeProduit);
-    }
-
-    public function flush(): void
-    {
-        $this->_em->flush();
-    }
-
-    public function remove(CommandeProduit $commandeProduit)
-    {
-        $this->_em->remove($commandeProduit);
     }
 }

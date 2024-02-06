@@ -2,6 +2,7 @@
 
 namespace AcMarche\MaintenanceShop\Repository;
 
+use AcMarche\MaintenanceShop\Doctrine\OrmCrudTrait;
 use AcMarche\MaintenanceShop\Entity\Commande;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -14,6 +15,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CommandeRepository extends ServiceEntityRepository
 {
+    use OrmCrudTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Commande::class);
@@ -43,26 +46,5 @@ class CommandeRepository extends ServiceEntityRepository
             ->andWhere('commande.envoye = 1')
             ->addOrderBy('commande.id', 'DESC')
             ->getQuery()->getResult();
-    }
-
-    public function remove(Commande $commande): void
-    {
-        $this->_em->remove($commande);
-        $this->save();
-    }
-
-    private function save(): void
-    {
-        $this->_em->flush();
-    }
-
-    public function persist(Commande $commande): void
-    {
-        $this->_em->persist($commande);
-    }
-
-    public function flush(): void
-    {
-        $this->_em->flush();
     }
 }

@@ -2,6 +2,7 @@
 
 namespace AcMarche\MaintenanceShop\Repository;
 
+use AcMarche\MaintenanceShop\Doctrine\OrmCrudTrait;
 use AcMarche\MaintenanceShop\Entity\Categorie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -15,6 +16,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CategorieRepository extends ServiceEntityRepository
 {
+    use OrmCrudTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Categorie::class);
@@ -29,15 +32,5 @@ class CategorieRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('produit')
             ->addOrderBy('produit.nom', 'ASC');
-    }
-
-    public function remove(Categorie $categorie): void
-    {
-        $this->_em->remove($categorie);
-    }
-
-    public function flush(): void
-    {
-        $this->_em->flush();
     }
 }
